@@ -49,7 +49,7 @@ module.exports = resolvers;
   \****************************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 16:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 32:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const Post = __webpack_require__(/*! ../../models/post.model */ "./server/models/post.model.js");
@@ -62,6 +62,22 @@ const postResolvers = {
         return posts;
       } catch (err) {
         return console.log(err);
+      }
+    },
+
+    async getPost(id) {
+      try {
+        const post = await Post.findOne({
+          id
+        });
+
+        if (!post) {
+          throw new Error("Post not found! ;_; ");
+        } else {
+          return post;
+        }
+      } catch (err) {
+        throw new Error(err);
       }
     }
 
@@ -211,7 +227,7 @@ module.exports = userResolvers;
   \************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 37:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 38:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const {
@@ -221,6 +237,7 @@ const {
 const typeDefs = gql`
     type Query{
         getPosts: [Post]
+        getPost(id:String!): Post
     }
 
     type Post{
