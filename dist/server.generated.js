@@ -2,38 +2,191 @@ module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./server/config.js":
-/*!**************************!*\
-  !*** ./server/config.js ***!
-  \**************************/
+/***/ "./config.js":
+/*!*******************!*\
+  !*** ./config.js ***!
+  \*******************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 1:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 6:0-14 */
 /***/ ((module) => {
 
-module.exports = {
-  MONGO_URL: `mongodb+srv://AaronBaron:AaronBaron@cluster0.syfka.gcp.mongodb.net/social-media-app?retryWrites=true&w=majority`,
-  PORT: 3000
+const config = {
+  PORT: 3000,
+  SECRET_KEY: 'GLORy to mankind',
+  MONGO_URL: `mongodb+srv://AaronBaron:AaronBaron@cluster0.syfka.gcp.mongodb.net/social-media-app?retryWrites=true&w=majority`
 };
+module.exports = config;
 
 /***/ }),
 
-/***/ "./server/models/Post.model.js":
+/***/ "./server/graphql/resolvers/main.resolvers.js":
+/*!****************************************************!*\
+  !*** ./server/graphql/resolvers/main.resolvers.js ***!
+  \****************************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 11:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const postResolvers = __webpack_require__(/*! ./post.resolvers */ "./server/graphql/resolvers/post.resolvers.js");
+
+const userResolvers = __webpack_require__(/*! ./user.resolvers */ "./server/graphql/resolvers/user.resolvers.js");
+
+const resolvers = {
+  Query: { ...postResolvers.Query
+  },
+  Mutation: { ...userResolvers.Mutation
+  }
+};
+module.exports = resolvers;
+
+/***/ }),
+
+/***/ "./server/graphql/resolvers/post.resolvers.js":
+/*!****************************************************!*\
+  !*** ./server/graphql/resolvers/post.resolvers.js ***!
+  \****************************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 16:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const Post = __webpack_require__(/*! ../../models/post.model */ "./server/models/post.model.js");
+
+const postResolvers = {
+  Query: {
+    async getPosts() {
+      try {
+        const posts = await Post.find();
+        return posts;
+      } catch (err) {
+        return console.log(err);
+      }
+    }
+
+  }
+};
+module.exports = postResolvers;
+
+/***/ }),
+
+/***/ "./server/graphql/resolvers/user.resolvers.js":
+/*!****************************************************!*\
+  !*** ./server/graphql/resolvers/user.resolvers.js ***!
+  \****************************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 44:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const User = __webpack_require__(/*! ../../models/user.model */ "./server/models/user.model.js");
+
+const bscript = __webpack_require__(/*! bcryptjs */ "bcryptjs");
+
+const jwt = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
+
+const {
+  SECRET_KEY
+} = __webpack_require__(/*! ../../../config */ "./config.js");
+
+const userResolvers = {
+  Mutation: {
+    async register(_, {
+      registerInput: {
+        username,
+        email,
+        password,
+        confirmPassword
+      }
+    }) {
+      password = await bscript.hash(password, 12);
+      const new_user = new User({
+        username,
+        email,
+        password,
+        createdAt: new Date().toISOString()
+      });
+      const res = await new_user.save();
+      const token = jwt.sign({
+        id: res._id,
+        username: res.username,
+        email: res.email
+      }, SECRET_KEY, {
+        expiresIn: '1h'
+      });
+      return { ...res._doc,
+        id: res._id,
+        token
+      };
+    }
+
+  }
+};
+module.exports = userResolvers;
+
+/***/ }),
+
+/***/ "./server/graphql/typeDefs.js":
+/*!************************************!*\
+  !*** ./server/graphql/typeDefs.js ***!
+  \************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 36:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const {
+  gql
+} = __webpack_require__(/*! apollo-server */ "apollo-server");
+
+const typeDefs = gql`
+    type Query{
+        getPosts: [Post]
+    }
+
+    type Post{
+        id: ID!
+        username: String!
+        body: String!
+        createdAt: String!
+    }
+
+    type User{
+        id: ID!
+        username: String!
+        email: String!
+        token: String!
+        createdAt: String!
+    }
+
+    input RegisterInput{
+        username: String!
+        email: String!
+        password: String!
+        confirmPassword: String!
+    }
+
+    type Mutation{
+        register(registerInput: RegisterInput): User!
+    }
+`;
+module.exports = typeDefs;
+
+/***/ }),
+
+/***/ "./server/models/post.model.js":
 /*!*************************************!*\
-  !*** ./server/models/Post.model.js ***!
+  !*** ./server/models/post.model.js ***!
   \*************************************/
-/*! namespace exports */
-/*! exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__, __webpack_require__.n, module.loaded, module.id, module, __webpack_require__.hmd, __webpack_require__.r, __webpack_exports__, __webpack_require__.* */
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 21:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongoose */ "mongoose");
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
-/* module decorator */ module = __webpack_require__.hmd(module);
+const mongoose = __webpack_require__(/*! mongoose */ "mongoose");
 
-const postSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)({
+const postSchema = new mongoose.Schema({
   body: String,
   username: String,
   createdAt: String,
@@ -47,11 +200,32 @@ const postSchema = new (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema)(
     createdAt: String
   }],
   user: {
-    type: (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Schema.Types.ObjectId),
-    ref: "users"
+    type: mongoose.Schema.Types.ObjectId,
+    refs: 'users'
   }
 });
-module.export = mongoose__WEBPACK_IMPORTED_MODULE_0___default().model('Post', postSchema);
+module.exports = mongoose.model('Post', postSchema);
+
+/***/ }),
+
+/***/ "./server/models/user.model.js":
+/*!*************************************!*\
+  !*** ./server/models/user.model.js ***!
+  \*************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 9:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const mongoose = __webpack_require__(/*! mongoose */ "mongoose");
+
+const userSchema = new mongoose.Schema({
+  username: String,
+  email: String,
+  password: String,
+  createdAt: String
+});
+module.exports = new mongoose.model("User", userSchema);
 
 /***/ }),
 
@@ -63,58 +237,36 @@ module.export = mongoose__WEBPACK_IMPORTED_MODULE_0___default().model('Post', po
 /*! runtime requirements: __webpack_require__ */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-const {
-  ApolloServer,
-  gql
-} = __webpack_require__(/*! apollo-server */ "apollo-server");
-
 const Mongoose = __webpack_require__(/*! mongoose */ "mongoose");
 
-const config = __webpack_require__(/*! ./config.js */ "./server/config.js");
+const {
+  ApolloServer
+} = __webpack_require__(/*! apollo-server */ "apollo-server");
 
-const Post = __webpack_require__(/*! ./models/Post.model */ "./server/models/Post.model.js");
+const config = __webpack_require__(/*! ../config */ "./config.js");
 
-const typeDefs = gql(`
-    type Query{
-        getPosts: [Post]
-    }
+const typeDefs = __webpack_require__(/*! ./graphql/typeDefs */ "./server/graphql/typeDefs.js");
 
-    type Post {
-        id: ID!
-        username: String!
-        body: String!
-        createdAt: String!
-    }
-`);
-const resolvers = {
-  Query: {
-    async getPosts() {
-      try {
-        const posts = await Post.find();
-        return posts;
-      } catch (err) {
-        throw new Error(err);
-      }
-    }
+const resolvers = __webpack_require__(/*! ./graphql/resolvers/main.resolvers */ "./server/graphql/resolvers/main.resolvers.js");
 
-  }
-};
 const server = new ApolloServer({
   typeDefs,
   resolvers
 });
-Mongoose.Promise = global.Promise;
 Mongoose.connect(config.MONGO_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useNewUrlParser: true
 }).then(() => {
   console.log("connected to MongoDB");
-}).catch(e => {
-  console.error("Unable to connect to MongoDB server: ", e);
+}).catch(err => {
+  console.error(err);
 });
 server.listen(config.PORT, err => {
-  if (err) return `unable to conn ect to port ${config.PORT}`;
-  console.log(`Connected to Server on port: ${config.PORT}`);
+  if (err) {
+    return console.log(err);
+  }
+
+  console.log("Connected to Server: ", config.PORT);
 });
 
 /***/ }),
@@ -133,13 +285,40 @@ module.exports = require("apollo-server");;
 
 /***/ }),
 
+/***/ "bcryptjs":
+/*!***************************!*\
+  !*** external "bcryptjs" ***!
+  \***************************/
+/*! dynamic exports */
+/*! exports [maybe provided (runtime-defined)] [no usage info] */
+/*! runtime requirements: module */
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("bcryptjs");;
+
+/***/ }),
+
+/***/ "jsonwebtoken":
+/*!*******************************!*\
+  !*** external "jsonwebtoken" ***!
+  \*******************************/
+/*! dynamic exports */
+/*! exports [maybe provided (runtime-defined)] [no usage info] */
+/*! runtime requirements: module */
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("jsonwebtoken");;
+
+/***/ }),
+
 /***/ "mongoose":
 /*!***************************!*\
   !*** external "mongoose" ***!
   \***************************/
 /*! dynamic exports */
-/*! export __esModule [maybe provided (runtime-defined)] [no usage info] [provision prevents renaming (no use info)] */
-/*! other exports [maybe provided (runtime-defined)] [no usage info] */
+/*! exports [maybe provided (runtime-defined)] [no usage info] */
 /*! runtime requirements: module */
 /***/ ((module) => {
 
@@ -161,76 +340,17 @@ module.exports = require("mongoose");;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			id: moduleId,
-/******/ 			loaded: false,
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
-/******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-/******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => module['default'] :
-/******/ 				() => module;
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/harmony module decorator */
-/******/ 	(() => {
-/******/ 		__webpack_require__.hmd = (module) => {
-/******/ 			module = Object.create(module);
-/******/ 			if (!module.children) module.children = [];
-/******/ 			Object.defineProperty(module, 'exports', {
-/******/ 				enumerable: true,
-/******/ 				set: () => {
-/******/ 					throw new Error('ES Modules may not assign module.exports or exports.*, Use ESM export syntax, instead: ' + module.id);
-/******/ 				}
-/******/ 			});
-/******/ 			return module;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
 /******/ 	
 /************************************************************************/
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled

@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+const mongoose = require("mongoose")
 
 const postSchema = new mongoose.Schema({
     body: String,
@@ -19,9 +19,8 @@ const postSchema = new mongoose.Schema({
     ],
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "users"
+        refs: 'users'
     }
 })
 
-
-module.export = mongoose.model('Post', postSchema)
+module.exports = mongoose.model('Post', postSchema)

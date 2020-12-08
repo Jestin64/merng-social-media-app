@@ -1,5 +1,5 @@
 {
     "verbose": false,
-    "watch" : ["./server"],
+    "watch" :["./server"],
     "exec": "webpack --mode development --config webpack.server.config.js && node ./dist/server.generated.js"
 }
