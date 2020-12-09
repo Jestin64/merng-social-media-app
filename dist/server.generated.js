@@ -20,13 +20,118 @@ module.exports = config;
 
 /***/ }),
 
+/***/ "./server/controllers/check-auth.js":
+/*!******************************************!*\
+  !*** ./server/controllers/check-auth.js ***!
+  \******************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 33:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const {
+  AuthenticationError
+} = __webpack_require__(/*! apollo-server */ "apollo-server");
+
+const jwt = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken");
+
+const {
+  SECRET_KEY
+} = __webpack_require__(/*! ../../config */ "./config.js"); //token expression pattern: context.req.headers.authorization.Bearer Token 
+
+
+function authCheck(context) {
+  const auth = context.req.headers.authorization;
+
+  if (auth) {
+    const token = auth.split('Bearer ')[1];
+
+    if (token) {
+      try {
+        const user = jwt.verify(token, SECRET_KEY);
+        return user;
+      } catch (err) {
+        throw new AuthenticationError('invalid/expired token');
+      }
+    } else {
+      throw new Error("Authentication Error");
+    }
+  } else {
+    throw new Error("Authorization header must be provided");
+  }
+}
+
+module.exports = authCheck;
+
+/***/ }),
+
+/***/ "./server/controllers/validators.js":
+/*!******************************************!*\
+  !*** ./server/controllers/validators.js ***!
+  \******************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module */
+/*! CommonJS bailout: module.exports is used directly at 45:0-14 */
+/***/ ((module) => {
+
+//check for user correct data format
+const validateRegisterData = (username, email, password, confirmPassword) => {
+  let errors = {};
+  const regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+  if (username.trim() === '') {
+    errors.username = "Username cannot be empty";
+  }
+
+  if (email.trim() === "") {
+    errors.email = "Email cannot be empty";
+  } else if (!email.match(regEx)) {
+    errors.email = "Please enter a valid email ";
+  }
+
+  if (password === '') {
+    errors.password = "Passwords cannot be empty";
+  } else if (password !== confirmPassword) {
+    errors.password = "Passwords must match";
+  }
+
+  return {
+    valid: Object.keys(errors).length < 1,
+    errors
+  };
+};
+
+const validateLogin = (username, password) => {
+  const errors = {};
+
+  if (username.trim() === '') {
+    errors.username = "Username cannot be empty";
+  }
+
+  if (password === "") {
+    errors.password = "Password cannot be empty";
+  }
+
+  return {
+    valid: Object.keys(errors).length < 1,
+    errors
+  };
+};
+
+module.exports = {
+  validateRegisterData,
+  validateLogin
+};
+
+/***/ }),
+
 /***/ "./server/graphql/resolvers/main.resolvers.js":
 /*!****************************************************!*\
   !*** ./server/graphql/resolvers/main.resolvers.js ***!
   \****************************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 11:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 12:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const postResolvers = __webpack_require__(/*! ./post.resolvers */ "./server/graphql/resolvers/post.resolvers.js");
@@ -36,7 +141,8 @@ const userResolvers = __webpack_require__(/*! ./user.resolvers */ "./server/grap
 const resolvers = {
   Query: { ...postResolvers.Query
   },
-  Mutation: { ...userResolvers.Mutation
+  Mutation: { ...userResolvers.Mutation,
+    ...postResolvers.Mutation
   }
 };
 module.exports = resolvers;
@@ -49,10 +155,12 @@ module.exports = resolvers;
   \****************************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 32:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 50:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const Post = __webpack_require__(/*! ../../models/post.model */ "./server/models/post.model.js");
+
+const authCheck = __webpack_require__(/*! ../../controllers/check-auth */ "./server/controllers/check-auth.js");
 
 const postResolvers = {
   Query: {
@@ -70,15 +178,31 @@ const postResolvers = {
         const post = await Post.findOne({
           id
         });
-
-        if (!post) {
-          throw new Error("Post not found! ;_; ");
-        } else {
-          return post;
-        }
+        if (post) return post;else throw new Error("Post not found! ;_; ");
       } catch (err) {
         throw new Error(err);
       }
+    }
+
+  },
+  Mutation: {
+    async createPost(_, {
+      body
+    }, context) {
+      const user = authCheck(context);
+
+      if (body.trim === '') {
+        throw new Error('Post body cannot be empty');
+      }
+
+      const new_post = await Post({
+        body,
+        user: user.id,
+        username: user.username,
+        createdAt: new Date().toISOString()
+      });
+      const post = await new_post.save();
+      return post;
     }
 
   }
@@ -113,7 +237,7 @@ const {
 const {
   validateRegisterData,
   validateLogin
-} = __webpack_require__(/*! ../../utils/validators */ "./server/utils/validators.js");
+} = __webpack_require__(/*! ../../controllers/validators */ "./server/controllers/validators.js");
 
 function generateToken(res) {
   return jwt.sign({
@@ -227,7 +351,7 @@ module.exports = userResolvers;
   \************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 38:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 39:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const {
@@ -265,6 +389,7 @@ const typeDefs = gql`
     type Mutation{
         register(registerInput: RegisterInput): User!
         login(username: String!, password: String!): User!
+        createPost(body: String!): Post!
     }
 `;
 module.exports = typeDefs;
@@ -347,7 +472,12 @@ const resolvers = __webpack_require__(/*! ./graphql/resolvers/main.resolvers */ 
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
+  context: ({
+    req
+  }) => ({
+    req
+  })
 });
 Mongoose.connect(config.MONGO_URL, {
   useUnifiedTopology: true,
@@ -364,66 +494,6 @@ server.listen(config.PORT, err => {
 
   console.log("Connected to Server: ", config.PORT);
 });
-
-/***/ }),
-
-/***/ "./server/utils/validators.js":
-/*!************************************!*\
-  !*** ./server/utils/validators.js ***!
-  \************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 45:0-14 */
-/***/ ((module) => {
-
-//check for user correct data format
-const validateRegisterData = (username, email, password, confirmPassword) => {
-  let errors = {};
-  const regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-  if (username.trim() === '') {
-    errors.username = "Username cannot be empty";
-  }
-
-  if (email.trim() === "") {
-    errors.email = "Email cannot be empty";
-  } else if (!email.match(regEx)) {
-    errors.email = "Please enter a valid email ";
-  }
-
-  if (password === '') {
-    errors.password = "Passwords cannot be empty";
-  } else if (password !== confirmPassword) {
-    errors.password = "Passwords must match";
-  }
-
-  return {
-    valid: Object.keys(errors).length < 1,
-    errors
-  };
-};
-
-const validateLogin = (username, password) => {
-  const errors = {};
-
-  if (username.trim() === '') {
-    errors.username = "Username cannot be empty";
-  }
-
-  if (password === "") {
-    errors.password = "Password cannot be empty";
-  }
-
-  return {
-    valid: Object.keys(errors).length < 1,
-    errors
-  };
-};
-
-module.exports = {
-  validateRegisterData,
-  validateLogin
-};
 
 /***/ }),
 
