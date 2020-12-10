@@ -76,7 +76,7 @@ const userResolvers = {
                 throw new UserInputError("Incorrec Password")
             }
 
-            console.log("logged in successfully")
+            // console.log("logged in successfully")
             const token = generateToken(user)
             return {
                 ...user._doc,
