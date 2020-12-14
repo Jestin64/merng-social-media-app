@@ -155,7 +155,7 @@ module.exports = resolvers;
   \****************************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 129:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 156:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const Post = __webpack_require__(/*! ../../models/post.model */ "./server/models/post.model.js");
@@ -255,7 +255,6 @@ const postResolvers = {
       }
     },
 
-    // TODO: deleteComment
     async deleteComment(_, {
       postId,
       commentId
@@ -281,8 +280,36 @@ const postResolvers = {
       } catch (e) {
         throw new Error(e);
       }
-    } //TODO: likes
+    },
 
+    //TODO: likes
+    async likePost(_, {
+      postId
+    }, context) {
+      const user = authCheck(context);
+
+      try {
+        const post = await Post.findById(postId);
+
+        if (post) {
+          if (post.likes.find(like => like.username === user.username)) {
+            post.likes = post.likes.filter(like => like.username !== user.username);
+          } else {
+            post.likes.push({
+              username: user.username,
+              createdAt: new Date().toISOString()
+            });
+          }
+
+          await post.save();
+          return post;
+        } else {
+          throw new Error(e);
+        }
+      } catch (e) {
+        throw new Error(e);
+      }
+    }
 
   }
 };
@@ -487,7 +514,7 @@ const typeDefs = gql`
         deletePost(postId: ID!): String!
         commentPost(postId: ID!, body: String!): Post!
         deleteComment(postId: ID!, commentId: ID!): Post!
-        likePost(postID: ID!): Post!
+        likePost(postId: ID!): Post!
     }
 `;
 module.exports = typeDefs;

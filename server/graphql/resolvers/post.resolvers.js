@@ -85,7 +85,6 @@ const postResolvers = {
             }
         },
 
-        // TODO: deleteComment
         async deleteComment(_, { postId, commentId }, context) {
             const user = authCheck(context)
 
@@ -110,7 +109,31 @@ const postResolvers = {
         },
 
         //TODO: likes
+        async likePost(_, {postId}, context){
+            const user = authCheck(context)
+            
+            try{
+                const post = await Post.findById(postId)
+                if(post){
+                    if(post.likes.find(like => like.username === user.username)){
+                        post.likes = post.likes.filter(like => like.username !== user.username)
+                    } else {
+                        post.likes.push({
+                            username: user.username,
+                            createdAt: new Date().toISOString()
+                        })
+                    }
+                
+                await post.save()
+                return post
+                } else {
+                    throw new Error(e)
+                }
+            } catch(e){
+                throw new Error(e)
+            }
 
+        }
 
     }
 }
