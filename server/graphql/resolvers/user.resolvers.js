@@ -21,6 +21,17 @@ function generateToken(res) {
 }
 
 const userResolvers = {
+    Query: {
+        async getUsers(){
+            try{
+                const users = await User.find().sort({createdAt:-1})
+                return users
+            } catch(e){
+                throw new Error(e)
+            }
+        }
+    },
+
     Mutation: {
         async register(_, { registerInput: { username, email, password, confirmPassword } }) {
 

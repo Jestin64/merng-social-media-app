@@ -131,7 +131,7 @@ module.exports = {
   \****************************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 12:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 13:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const postResolvers = __webpack_require__(/*! ./post.resolvers */ "./server/graphql/resolvers/post.resolvers.js");
@@ -139,7 +139,8 @@ const postResolvers = __webpack_require__(/*! ./post.resolvers */ "./server/grap
 const userResolvers = __webpack_require__(/*! ./user.resolvers */ "./server/graphql/resolvers/user.resolvers.js");
 
 const resolvers = {
-  Query: { ...postResolvers.Query
+  Query: { ...userResolvers.Query,
+    ...postResolvers.Query
   },
   Mutation: { ...userResolvers.Mutation,
     ...postResolvers.Mutation
@@ -323,7 +324,7 @@ module.exports = postResolvers;
   \****************************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 122:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 135:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const bscript = __webpack_require__(/*! bcryptjs */ "bcryptjs");
@@ -356,6 +357,19 @@ function generateToken(res) {
 }
 
 const userResolvers = {
+  Query: {
+    async getUsers() {
+      try {
+        const users = await User.find().sort({
+          createdAt: -1
+        });
+        return users;
+      } catch (e) {
+        throw new Error(e);
+      }
+    }
+
+  },
   Mutation: {
     async register(_, {
       registerInput: {
@@ -457,7 +471,7 @@ module.exports = userResolvers;
   \************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 58:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 59:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const {
@@ -468,6 +482,7 @@ const typeDefs = gql`
     type Query{
         getPosts: [Post]!
         getPost(postId:String!): Post!
+        getUsers: [User]!
     }
 
     type Post{

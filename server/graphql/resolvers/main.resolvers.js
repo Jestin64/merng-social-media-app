@@ -3,6 +3,7 @@ const userResolvers = require("./user.resolvers")
 
 const resolvers = {
     Query:{
+        ...userResolvers.Query,
         ...postResolvers.Query
     },
     Mutation:{
