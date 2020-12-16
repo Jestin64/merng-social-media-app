@@ -1,7 +1,7 @@
 import React from "react"
 
 
-export default ()=>{
+export default function Home(){
     return(
         <div>
             <h2>Home page</h2>

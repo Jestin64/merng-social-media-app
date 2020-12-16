@@ -49,6 +49,8 @@ module.exports = {
         })
     ],
     devServer: {
+        historyApiFallback: true,  //! this line makes the manual url insertion work 
+        // https://stackoverflow.com/questions/27928372/react-router-urls-dont-work-when-refreshing-or-writing-manually?page=1&tab=votes#tab-top
         contentBase: path.join(__dirname, 'dist'),
         port: 4000,
         hot: true,
