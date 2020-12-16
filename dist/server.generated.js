@@ -131,7 +131,7 @@ module.exports = {
   \****************************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 13:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 17:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const postResolvers = __webpack_require__(/*! ./post.resolvers */ "./server/graphql/resolvers/post.resolvers.js");
@@ -139,6 +139,10 @@ const postResolvers = __webpack_require__(/*! ./post.resolvers */ "./server/grap
 const userResolvers = __webpack_require__(/*! ./user.resolvers */ "./server/graphql/resolvers/user.resolvers.js");
 
 const resolvers = {
+  Post: {
+    countLikes: parent => parent.likes.length,
+    countComments: parent => parent.comments.length
+  },
   Query: { ...userResolvers.Query,
     ...postResolvers.Query
   },
@@ -471,7 +475,7 @@ module.exports = userResolvers;
   \************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 59:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 61:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const {
@@ -492,6 +496,8 @@ const typeDefs = gql`
         createdAt: String!
         comments: [Comment]!
         likes: [Like]!
+        countLikes: Int!
+        countComments: Int!
     }
 
     type Comment{

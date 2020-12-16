@@ -1,8 +1,9 @@
 import React from "react"
 import {render} from "react-dom"
-import Home from "./Home"
+import ApolloProvider from "./ApolloProvider"
+
 
 render(
-    <Home />,
+    ApolloProvider,
     document.getElementById("root")
 )
