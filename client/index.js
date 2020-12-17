@@ -4,6 +4,6 @@ import ApolloProvider from "./ApolloProvider"
 
 
 render(
-    ApolloProvider,
+    ApolloProvider ,
     document.getElementById("root")
 )

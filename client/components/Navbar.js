@@ -1,49 +1,45 @@
-import React from "react"
-import { Menu } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import { Menu } from 'semantic-ui-react'
 
 
-function Navbar() {
+export default function Navbar() {
     const pathname = window.location.pathname
-    const path = pathname === '/' ? 'home' : pathname.substring(1)
+    const path = pathname === '/' ? 'home' : pathname.substr(1)
     const [activeItem, setActiveItem] = React.useState(path)
 
-    function handleClick(e, {name}) {
+    function handleClick(e, { name }) {
         setActiveItem(name)
     }
 
     return (
         <div>
-            <Menu pointing secondary size="massive"  color="teal" >
+            <Menu pointing secondary size="massive" color="teal">
                 <Menu.Item
                     name="home"
-                    active={activeItem === 'home'}
                     onClick={handleClick}
+                    active={activeItem === 'home'}
                     as={Link}
-                    to="/" 
+                    to="/"
                 />
-
                 <Menu.Menu position="right">
                     <Menu.Item
                         name="login"
-                        active={activeItem === 'login'}
                         onClick={handleClick}
+                        active={activeItem === 'login'}
                         as={Link}
-                        to="/login" 
+                        to="/login"
                     />
 
                     <Menu.Item
                         name="register"
-                        active={activeItem === 'register'}
                         onClick={handleClick}
+                        active={activeItem === 'register'}
                         as={Link}
-                        to="/register" 
-                    /> 
+                        to="/register"
+                    />
                 </Menu.Menu>
-                
             </Menu>
         </div>
     )
 }
-
-export default Navbar

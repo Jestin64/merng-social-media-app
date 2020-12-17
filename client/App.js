@@ -1,29 +1,29 @@
 import React from "react"
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
-import "semantic-ui-css/semantic.min.css"
-import { Container } from "semantic-ui-react"
+import 'semantic-ui-css/semantic.min.css'
+import { Container } from 'semantic-ui-react'
+import {BrowserRouter, Route, Switch} from "react-router-dom"
 
 import './App.css'
 import Navbar from "./components/Navbar"
-import Home from "./components/pages/Home.page"
-import Login from "./components/pages/Login.page"
-import Register from "./components/pages/Register.page"
+import Home from "./components/paths/Home.path"
+import Login from "./components/paths/Login.path"
+import Register from "./components/paths/Register.path"
 
 
 export default function App() {
-    return (
+    return(
         <div>
             <Container >
-                <Router>
+                <BrowserRouter>
                     <Navbar />
-                    <Switch>
-                        <Route exact path='/' component={Home} />
-                        <Route exact path='/login' component={Login} />
-                        <Route exact path='/register' component={Register} />
-                        <Route render={() => <h1>404: page not found</h1>} />
-                    </Switch>
-                </Router>
+                    <Switch >
+                        <Route exact path="/" component={Home} />
+                        <Route exact path="/login" component={Login} />
+                        <Route exact path="/register" component={Register} />
+                    </Switch> 
+                </BrowserRouter>
             </Container>
+            
         </div>
     )
 }
