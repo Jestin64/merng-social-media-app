@@ -33,7 +33,7 @@ const userResolvers = {
     },
 
     Mutation: {
-        async register(_, { registerInput: { username, email, password, confirmPassword } }) {
+        async registerUser(_, { registerInput: { username, email, password, confirmPassword } }) {
 
             // user validation
             const { valid, errors } = validateRegisterData(username, email, password, confirmPassword)

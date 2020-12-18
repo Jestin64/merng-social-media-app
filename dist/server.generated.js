@@ -375,7 +375,7 @@ const userResolvers = {
 
   },
   Mutation: {
-    async register(_, {
+    async registerUser(_, {
       registerInput: {
         username,
         email,
@@ -529,7 +529,7 @@ const typeDefs = gql`
     }
 
     type Mutation{
-        register(registerInput: RegisterInput): User!
+        registerUser(registerInput: RegisterInput): User!
         login(username: String!, password: String!): User!
         createPost(body: String!): Post!
         deletePost(postId: ID!): String!
