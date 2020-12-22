@@ -29,12 +29,12 @@ function PostCard({ props: {id, body, username, createdAt, countLikes, countComm
                         </Card.Description>
                     </Card.Content>
                     
-                    {/* likebutton and commentbutton*/}
+                    {/* likebutton and commentbutton*/}                   
                     <Card.Content extra >
                         <ButtonPart props={countLikes} onClick={likeOnPost}/>
-                        <CommentPart props={countComments} onClick={commentOnPost}/>
+                        <CommentPart props={countComments} onClick={commentOnPost}/> 
                     </Card.Content>
-
+                    
                 </Card>
             </Card.Group>
         </div>

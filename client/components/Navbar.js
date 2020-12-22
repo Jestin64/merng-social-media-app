@@ -7,6 +7,7 @@ export default function Navbar() {
     const pathname = window.location.pathname
     const path = pathname === '/' ? 'home' : pathname.substr(1)
     const [activeItem, setActiveItem] = React.useState(path)
+    const isLogged = false
 
     function handleClick(e, { name }) {
         setActiveItem(name)
@@ -22,14 +23,26 @@ export default function Navbar() {
                     as={Link}
                     to="/"
                 />
+
+                {/* if logged in then display profile instead of login  */}
                 <Menu.Menu position="right">
-                    <Menu.Item
-                        name="login"
-                        onClick={handleClick}
-                        active={activeItem === 'login'}
-                        as={Link}
-                        to="/login"
-                    />
+                    {
+                        isLogged ?      
+                        (<Menu.Item
+                            name="profile"
+                            onClick={handleClick}
+                            active={activeItem === 'profile'}
+                            as={Link}
+                            to="/Profile"
+                        />)
+                        : (<Menu.Item
+                            name="login"
+                            onClick={handleClick}
+                            active={activeItem === 'login'}
+                            as={Link}
+                            to="/login"
+                        />)
+                    }
 
                     <Menu.Item
                         name="register"

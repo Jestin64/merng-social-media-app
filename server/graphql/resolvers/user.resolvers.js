@@ -72,7 +72,7 @@ const userResolvers = {
             const { valid, errors } = validateLogin(username, password)
 
             if (!valid) {
-                throw new UserInputError("Error", { error })
+                throw new UserInputError("Error", { errors })
             }
 
             const user = await User.findOne({ username })
@@ -84,7 +84,7 @@ const userResolvers = {
             const match = await bscript.compare(password, user.password)
             if (!match) {
                 errors.general = "Incorrect Password"
-                throw new UserInputError("Incorrec Password")
+                throw new UserInputError("Incorrect Password")
             }
 
             // console.log("logged in successfully")

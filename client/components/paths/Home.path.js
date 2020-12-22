@@ -37,13 +37,13 @@ function Home() {
     return (
         <div className="ui container">
             <Grid columns={1}>
-                <Grid.Row> 
+                <Grid.Row className="grid-row-header"> 
                     <h2>Recent Posts</h2>
                 </Grid.Row>
                 <Grid.Row>
                     {
                         loading
-                        ?<h3>loading...</h3>
+                        ? <h3>loading...</h3>
                         : posts && posts.map(post => {
                             return(
                                 <Grid.Column key={post.id}>

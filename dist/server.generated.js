@@ -181,7 +181,7 @@ const postResolvers = {
         });
         return posts;
       } catch (err) {
-        return console.log(err);
+        throw new Error(err);
       }
     },
 
@@ -193,7 +193,7 @@ const postResolvers = {
       } else {
         try {
           const post = await Post.findById(postId);
-          if (post) return post;else throw new Error("Post not found! ;_; ");
+          if (post) return post;else throw new Error("Post not found!");
         } catch (err) {
           throw new Error(err);
         }
@@ -433,7 +433,7 @@ const userResolvers = {
 
       if (!valid) {
         throw new UserInputError("Error", {
-          error
+          errors
         });
       }
 
@@ -452,7 +452,7 @@ const userResolvers = {
 
       if (!match) {
         errors.general = "Incorrect Password";
-        throw new UserInputError("Incorrec Password");
+        throw new UserInputError("Incorrect Password");
       } // console.log("logged in successfully")
 
 

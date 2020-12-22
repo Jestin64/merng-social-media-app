@@ -12,7 +12,7 @@ function CommentPart({props: countComments}) {
 
         <Button as="div" labelPosition="right" >
             <Button color="teal" basic onClick={commentOnPost}>
-                <Icon name="comment outline" />
+                <Icon name="comments outline" />
                     comment
             </Button>
             <Label as="a" basic color="teal" pointing="left">

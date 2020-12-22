@@ -8,7 +8,6 @@ import App from "./App"
 
 
 
-
 const httplink = createHttpLink({
     uri: 'http://localhost:3000'
 })

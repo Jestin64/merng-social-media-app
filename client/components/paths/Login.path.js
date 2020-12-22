@@ -1,47 +1,111 @@
 import React from 'react'
 import { Button, Form, Card } from 'semantic-ui-react'
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
+import {useMutation} from "@apollo/react-hooks"
+import gql from "graphql-tag"
 
+
+const LOGIN_USER = gql`
+mutation LoginUser(
+    $username: String!
+    $password: String!
+) {
+    login(username: $username, password: $password){
+        id
+        email
+        username
+        token 
+        createdAt
+    }
+}
+`
 
 function Login() {
+    let history = useHistory()
+    const [values, setValues] = React.useState({
+        username:'',
+        password:''
+    })
+
+    const [errors ,setErrors] = React.useState({})
+    // console.log("login: ",errors)
+    const [loginUser, {loading}] = useMutation(LOGIN_USER, {
+        update(proxy, result){
+            console.log(result)
+        },  
+        onError(err){
+            setErrors(err.graphQLErrors[0].extensions.exception.errors)
+        },
+        variables: {
+            username: values.username,
+            password: values.password
+        }
+    })
+
+    const handleOnChange =(e)=>{
+        e.preventDefault()
+        setValues({
+            ...values, [e.target.name]: e.target.value
+        })
+    }
+
+    const handleSubmit =(e)=>{
+        e.preventDefault()
+        loginUser()
+        history.push('/')
+    }
+
     return (
         <div className="ui center aligned column grid">
-            <Card style={{
-                backgroundColor: "#02cec4",
-                marginTop: "40px",
-                padding: "10px",
-            }}>
-                <Card.Header style={{
-                    marginBottom: "30px",
-                    marginLeft: "10px",
-                    marginTop: "10px",
-                    border: "1px",
-                    color: "white",
-                    fontSize: "25px"
-                }}>Login</Card.Header>
-
+            <Card className="card-login">
+                <Card.Header className="card-login-header">Login</Card.Header>
                 <Card.Content>
-                    <Form>
-                        <Form.Field>
-                            <label>Username</label>
-                            <input placeholder="enter your username" />
+                    <Form onSubmit={handleSubmit} className={loading ? 'loading': ''}>
+                        <Form.Field >                           
+                            <Form.Input placeholder="enter your username" 
+                                label="Username"
+                                name="username"
+                                type="text"                                             
+                                value={values.username}
+                                error={errors.username? true:false}
+                                onChange={handleOnChange}
+                            />
                         </Form.Field>
-                        <Form.Field>
-                            <label>Password</label>
-                            <input placeholder="enter your password" />
+                        <Form.Field >
+                            <Form.Input placeholder="enter your password"
+                                label="Password"
+                                name="password"
+                                type="password"  
+                                error={errors.password? true:false}          
+                                value={values.password}
+                                onChange={handleOnChange}
+                            />
                         </Form.Field>
                         <Button type="submit">Sign In</Button>
                     </Form>
+
                 </Card.Content>
 
-                <Card.Description style={{
-                    marginTop: "20px",
-                    marginBottom: "10px",
-                }} 
+                <Card.Description className="card-description" 
                 as={Link}
                 to = '/register'                 
                 >no account? register here
                 </Card.Description>
+                {
+                        Object.keys(errors).length > 0 && (
+                            <ul className="list">
+                                <div className="ui error message">
+                                    {
+                                        Object.values(errors).map(e_val=>{
+                                            return(
+                                                <li key={e_val}>{e_val}</li>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            </ul>
+                        )                  
+                    }
             </Card>
         </div>
     )

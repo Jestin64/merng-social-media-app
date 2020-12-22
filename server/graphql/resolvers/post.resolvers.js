@@ -10,7 +10,7 @@ const postResolvers = {
                 const posts = await Post.find().sort({ createdAt: -1 })
                 return posts
             } catch (err) {
-                return console.log(err)
+                throw new Error(err)
             }
         },
 
@@ -22,7 +22,7 @@ const postResolvers = {
                     const post = await Post.findById(postId)
                     if (post)
                         return post
-                    else throw new Error("Post not found! ;_; ")
+                    else throw new Error("Post not found!")
                 } catch (err) {
                     throw new Error(err)
                 }

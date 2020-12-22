@@ -16,11 +16,11 @@ module.exports = {
                 use: ["babel-loader"]
             },
             {
-                test: /\.(css|sass)$/,
-                include: [
-                    path.join(__dirname, 'src'),
-                    /node_modules/
-                ],
+                test: /\.css$/,
+                // include: [
+                //     path.join(__dirname, 'src'),
+                //     /node_modules/
+                // ],
                 use: ["style-loader", "css-loader"]
             },
             {

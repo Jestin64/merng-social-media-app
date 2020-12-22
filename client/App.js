@@ -23,7 +23,6 @@ export default function App() {
                     </Switch> 
                 </BrowserRouter>
             </Container>
-            
         </div>
     )
 }
