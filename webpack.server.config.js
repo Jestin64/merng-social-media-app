@@ -13,7 +13,7 @@ const config = {
         // publicPath: '/dist/',
         libraryTarget: "commonjs2"
     },
-    externals: [nodeExternals()],
+    externals: [nodeExternals()], //ignores the node_modules folder from bundling and creating errors
     module: {
         rules: [
             {

@@ -160,7 +160,7 @@ module.exports = resolvers;
   \****************************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 156:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 155:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const Post = __webpack_require__(/*! ../../models/post.model */ "./server/models/post.model.js");
@@ -168,8 +168,7 @@ const Post = __webpack_require__(/*! ../../models/post.model */ "./server/models
 const authCheck = __webpack_require__(/*! ../../controllers/check-auth */ "./server/controllers/check-auth.js");
 
 const {
-  AuthenticationError,
-  UserInputError
+  AuthenticationError
 } = __webpack_require__(/*! apollo-server */ "apollo-server");
 
 const postResolvers = {
@@ -393,7 +392,7 @@ const userResolvers = {
         throw new UserInputError('Errors', {
           errors
         });
-      } // unique username(done)
+      } // unique username
 
 
       const check = await User.findOne({
@@ -404,7 +403,7 @@ const userResolvers = {
         throw new UserInputError("Oops, username is already taken :(", {
           error: "Oops, username is already taken :("
         });
-      } // password crypting and token gen(done)
+      } // password crypting and token gen
 
 
       password = await bscript.hash(password, 12);
@@ -529,7 +528,7 @@ const typeDefs = gql`
     }
 
     type Mutation{
-        registerUser(registerInput: RegisterInput): User!
+        registerUser(registerInput: RegisterInput!): User!
         login(username: String!, password: String!): User!
         createPost(body: String!): Post!
         deletePost(postId: ID!): String!

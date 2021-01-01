@@ -43,7 +43,7 @@ function Register() {
 
     const [addUser, {loading}] = useMutation(REGISTER_USER,{
         update(proxy, result){
-            console.log(result)
+            history.push('/login')
         },
         onError(err){
             setErrors(err.graphQLErrors[0].extensions.exception.errors)
@@ -66,7 +66,6 @@ function Register() {
     const handleSubmit = (e)=>{
         e.preventDefault()
         addUser()
-        history.push('/login')
     }
 
     return (
@@ -126,8 +125,8 @@ function Register() {
 
                     {
                         Object.keys(errors).length > 0 && (
-                            <ul className="list">
-                                <div className="ui error message">
+                            <div className="ui error message">
+                                <ul className="list">
                                     {
                                         Object.values(errors).map(e_val=>{
                                             return(
@@ -135,8 +134,8 @@ function Register() {
                                             )
                                         })
                                     }
-                                </div>
-                            </ul>
+                                </ul>
+                            </div>
                         )                  
                     }
                 </Card.Content>

@@ -41,7 +41,7 @@ const userResolvers = {
                 throw new UserInputError('Errors', { errors })
             }
 
-            // unique username(done)
+            // unique username
             const check = await User.findOne({ username })
             if (check) {
                 throw new UserInputError("Oops, username is already taken :(", {
@@ -49,7 +49,7 @@ const userResolvers = {
                 })
             }
 
-            // password crypting and token gen(done)
+            // password crypting and token gen
             password = await bscript.hash(password, 12)
             const new_user = new User({
                 username,

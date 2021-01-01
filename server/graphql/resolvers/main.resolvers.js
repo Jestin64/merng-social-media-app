@@ -3,8 +3,7 @@ const userResolvers = require("./user.resolvers")
 
 const resolvers = {
     Post: {
-        countLikes: (parent) => parent.likes.length
-        ,
+        countLikes: (parent) => parent.likes.length,
         countComments: (parent) => parent.comments.length
     },
     Query: {

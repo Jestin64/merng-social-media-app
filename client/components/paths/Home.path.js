@@ -28,7 +28,7 @@ const FETCH_POSTS = gql`
 function Home() {
     const { loading, error, data } = useQuery(FETCH_POSTS)
     if(data){
-        var {getPosts: posts} = data
+        var {getPosts: posts} = data // destructure the data part like this else you will get a unfound variable error
     }
     if (error) {
         throw new Error(error)

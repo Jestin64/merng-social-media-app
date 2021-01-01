@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, Card } from 'semantic-ui-react'
+import { Button, Form, Card, CardContent } from 'semantic-ui-react'
 import { Link, useHistory } from "react-router-dom"
 import {useMutation} from "@apollo/react-hooks"
 import gql from "graphql-tag"
@@ -31,7 +31,8 @@ function Login() {
     // console.log("login: ",errors)
     const [loginUser, {loading}] = useMutation(LOGIN_USER, {
         update(proxy, result){
-            console.log(result)
+            console.log(result.data.login)
+            history.push('/')
         },  
         onError(err){
             setErrors(err.graphQLErrors[0].extensions.exception.errors)
@@ -52,7 +53,6 @@ function Login() {
     const handleSubmit =(e)=>{
         e.preventDefault()
         loginUser()
-        history.push('/')
     }
 
     return (
@@ -93,8 +93,8 @@ function Login() {
                 </Card.Description>
                 {
                         Object.keys(errors).length > 0 && (
-                            <ul className="list">
-                                <div className="ui error message">
+                            <div className="ui error message">
+                                <ul className="">
                                     {
                                         Object.values(errors).map(e_val=>{
                                             return(
@@ -102,8 +102,8 @@ function Login() {
                                             )
                                         })
                                     }
-                                </div>
-                            </ul>
+                                </ul>
+                            </div>
                         )                  
                     }
             </Card>
