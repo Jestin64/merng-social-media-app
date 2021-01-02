@@ -1,6 +1,7 @@
-import React from 'react'
-import { Button, Form, Card, CardContent } from 'semantic-ui-react'
+import React, {useContext} from 'react'
+import { Button, Form, Card } from 'semantic-ui-react'
 import { Link, useHistory } from "react-router-dom"
+import {AuthContext} from "../../context/auth.context"
 import {useMutation} from "@apollo/react-hooks"
 import gql from "graphql-tag"
 
@@ -21,6 +22,7 @@ mutation LoginUser(
 `
 
 function Login() {
+    const context = useContext(AuthContext)
     let history = useHistory()
     const [values, setValues] = React.useState({
         username:'',
@@ -31,7 +33,7 @@ function Login() {
     // console.log("login: ",errors)
     const [loginUser, {loading}] = useMutation(LOGIN_USER, {
         update(proxy, result){
-            console.log(result.data.login)
+            context.login(result.data.login)
             history.push('/')
         },  
         onError(err){
