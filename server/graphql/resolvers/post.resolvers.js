@@ -1,6 +1,6 @@
 const Post = require("../../models/post.model")
 const authCheck = require("../../controllers/check-auth")
-const { AuthenticationError } = require("apollo-server")
+const { AuthenticationError,UserInputError } = require("apollo-server")
 
 
 const postResolvers = {
@@ -34,8 +34,8 @@ const postResolvers = {
         async createPost(_, { body }, context) {
             const user = authCheck(context)
 
-            if (body.trim === '')
-                throw new Error('Post body cannot be empty')
+            if (body.trim() === '')
+                throw new UserInputError('Post body cannot be empty')
 
             const new_post = await Post({
                 body,
@@ -108,7 +108,6 @@ const postResolvers = {
             }
         },
 
-        //TODO: likes
         async likePost(_, {postId}, context){
             const user = authCheck(context)
             

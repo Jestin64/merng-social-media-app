@@ -168,7 +168,8 @@ const Post = __webpack_require__(/*! ../../models/post.model */ "./server/models
 const authCheck = __webpack_require__(/*! ../../controllers/check-auth */ "./server/controllers/check-auth.js");
 
 const {
-  AuthenticationError
+  AuthenticationError,
+  UserInputError
 } = __webpack_require__(/*! apollo-server */ "apollo-server");
 
 const postResolvers = {
@@ -205,7 +206,7 @@ const postResolvers = {
       body
     }, context) {
       const user = authCheck(context);
-      if (body.trim === '') throw new Error('Post body cannot be empty');
+      if (body.trim() === '') throw new UserInputError('Post body cannot be empty');
       const new_post = await Post({
         body,
         user: user.id,
@@ -286,7 +287,6 @@ const postResolvers = {
       }
     },
 
-    //TODO: likes
     async likePost(_, {
       postId
     }, context) {

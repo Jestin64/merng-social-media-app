@@ -1,21 +1,27 @@
 import React from "react"
+import { Link, useHistory } from "react-router-dom"
 import { Button, Icon, Label } from "semantic-ui-react"
 
 
-function CommentPart({props: countComments}) {
+function CommentPart({post: {countComments, id}, user}) {
+    const history = useHistory()
 
-    const commentOnPost = ()=>{
-        console.log("post commented")
+    function commentOnPost(){ 
+        user ? (
+            history.push(`/posts/${id}`)
+        ) :(
+            history.push('/login')
+        )
     }
     
     return (
 
         <Button as="div" labelPosition="right" >
-            <Button color="teal" basic onClick={commentOnPost}>
+            <Button color="teal" basic onClick={commentOnPost} >
                 <Icon name="comments outline" />
                     comment
             </Button>
-            <Label as="a" basic color="teal" pointing="left">
+            <Label basic color="teal" pointing="left">
                 {countComments}
             </Label>
         </Button>
@@ -24,3 +30,5 @@ function CommentPart({props: countComments}) {
 }
 
 export default CommentPart
+
+// as={Link} to={`posts/${postID}`}

@@ -1,5 +1,5 @@
 import React, {useContext} from 'react'
-import { Button, Form, Card } from 'semantic-ui-react'
+import { Button, Form, Card, Icon} from 'semantic-ui-react'
 import { Link, useHistory } from "react-router-dom"
 import {AuthContext} from "../../context/auth.context"
 import {useMutation} from "@apollo/react-hooks"
@@ -23,17 +23,17 @@ mutation LoginUser(
 
 function Login() {
     const context = useContext(AuthContext)
-    let history = useHistory()
+    const history = useHistory()
     const [values, setValues] = React.useState({
         username:'',
         password:''
     })
 
     const [errors ,setErrors] = React.useState({})
-    // console.log("login: ",errors)
     const [loginUser, {loading}] = useMutation(LOGIN_USER, {
         update(proxy, result){
-            context.login(result.data.login)
+            //console.log(result.data.login)
+            context.login(result.data.login) 
             history.push('/')
         },  
         onError(err){
@@ -90,13 +90,15 @@ function Login() {
 
                 <Card.Description className="card-description" 
                 as={Link}
-                to = '/register'                 
-                >no account? register here
+                to = '/register'              
+                > <Icon name="help"/>
+                    no account? register here
                 </Card.Description>
+
                 {
                         Object.keys(errors).length > 0 && (
                             <div className="ui error message">
-                                <ul className="">
+                                <ul className="list">
                                     {
                                         Object.values(errors).map(e_val=>{
                                             return(
