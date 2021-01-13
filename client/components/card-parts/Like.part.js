@@ -30,13 +30,11 @@ function LikePart({ post: { id, countLikes, likes }, user }) {
     useEffect(()=>{
         user && likes.find(like=>user.username === like.username) ? 
             setLike(true) : setLike(false)
-    }, [like, user])
+    }, [likes, user])  // update based on likes not like variable
 
     function handleOnClick() {
-        console.log("handle click triggered")
         if(user){
             LikePost()
-            console.log(like)
         } else {
             history.push('/login')
         } 

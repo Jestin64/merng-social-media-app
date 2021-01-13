@@ -14,19 +14,20 @@ export default function Navbar() {
         setActiveItem(name)
     }
 
+    //render the home page as is, render the profile : login and the logout: register if logged in
     return (
-        context.user
-            ? (
-                <div>
-                    <Menu pointing secondary size="massive" color="teal">
-                        <Menu.Item
-                            name="home"
-                            onClick={handleClick}
-                            active={activeItem === 'home'}
-                            as={Link}
-                            to="/"
-                        />
-                        <Menu.Menu position="right">
+        <div>
+            <Menu pointing secondary size="massive" color="teal">
+                <Menu.Item
+                    name="home"
+                    onClick={handleClick}
+                    active={activeItem === 'home'}
+                    as={Link}
+                    to="/"
+                />
+                <Menu.Menu position="right">
+                    {context.user ? (
+                        <>
                             <Menu.Item
                                 name={context.user.username}
                                 onClick={handleClick}
@@ -42,22 +43,9 @@ export default function Navbar() {
                                 as={Link}
                                 to="/login"
                             />
-                        </Menu.Menu>
-                    </Menu>
-                </div>
-            )
-            : (
-                <div>
-                    <Menu pointing secondary size="massive" color="teal">
-                        <Menu.Item
-                            name="home"
-                            onClick={handleClick}
-                            active={activeItem === 'home'}
-                            as={Link}
-                            to="/"
-                        />
-
-                        <Menu.Menu position="right">
+                        </>
+                    ): (
+                        <>
                             <Menu.Item
                                 name="login"
                                 onClick={handleClick}
@@ -73,9 +61,10 @@ export default function Navbar() {
                                 as={Link}
                                 to="/register"
                             />
-                        </Menu.Menu>
-                    </Menu>
-                </div>
-            )
+                        </>
+                    )}
+                </Menu.Menu>
+            </Menu>
+        </div>
     )
 }
