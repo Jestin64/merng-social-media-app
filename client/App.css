@@ -22,3 +22,12 @@
     margin-top: 20px !important;
     margin-bottom: 10px !important;
 }
+
+.footer{
+    background-color: #000000;
+    position: relative;
+    margin: 0;
+    text-align: center;
+    border: 0;
+    padding:0;
+}

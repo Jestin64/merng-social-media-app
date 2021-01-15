@@ -1,19 +1,17 @@
 import React, { useContext, } from "react"
-import { Card, Image, Button, Icon } from 'semantic-ui-react'
+import { Card, Image } from 'semantic-ui-react'
 import { Link } from "react-router-dom"
 import moment from "moment"
 
-import LikePart from "./card-parts/Like.part"
-import CommentPart from "./card-parts/Comment.part"
-import { AuthContext } from "../context/auth.context"
+import LikeButton from "./card-parts/Like.part.js"
+import CommentButton from "./card-parts/Comment.part.js"
+import DeleteButton from "./card-parts/Delete.part.js"
+import { AuthContext } from "../context/auth.context.js"
+
 
 
 function PostCard({ post: { id, body, username, likes, comments, createdAt, countLikes, countComments } }) {
     const {user} = useContext(AuthContext)
-    
-    function deletePost() {
-        console.log("delete post")
-    }
 
     return (
         <div>
@@ -31,14 +29,15 @@ function PostCard({ post: { id, body, username, likes, comments, createdAt, coun
                         </Card.Description>
                     </Card.Content>
 
-                    {/* likebutton and commentbutton*/}
+                    {/* LikeButton and CommentButton
+                    */}
                     <Card.Content extra >
                         <>
-                            <LikePart
+                            <LikeButton
                                 user={user}
                                 post={{id, likes, countLikes}}
                             />
-                            <CommentPart
+                            <CommentButton  
                                 user={user}
                                 post={{id, countComments}}
                             />
@@ -47,13 +46,7 @@ function PostCard({ post: { id, body, username, likes, comments, createdAt, coun
                     {/* delete button only if the user is logged in and should render only if 
                     its the currently logged in user's post */}
                         {user && user.username === username && (
-                            <Button
-                                color="red"
-                                floated="right"
-                                onClick={deletePost}    
-                            >
-                                <Icon name="trash" style={{margin:"0"}}/> 
-                            </Button>
+                            <DeleteButton user={user} post={id}/>
                         )}
                     </Card.Content>
                 </Card>

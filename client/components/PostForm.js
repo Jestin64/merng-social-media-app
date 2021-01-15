@@ -22,7 +22,6 @@ export default function PostForm() {
 
     const [MakePost, { loading, error }] = useMutation(POST, {
         update(proxy, result) {
-            console.log('postform result: ', result)
             setBody('')  // reset body field after making the post
         },
         variables: {

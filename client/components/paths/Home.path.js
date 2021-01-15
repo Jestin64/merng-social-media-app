@@ -41,7 +41,7 @@ function Home() {
 
         <div className="ui container">
             <Transition.Group >
-                <Grid columns={1}>
+                <Grid columns={2}>
                     <Grid.Row className="grid-row-header">
                         <h2>Recent Posts</h2>
                     </Grid.Row>

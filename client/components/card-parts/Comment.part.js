@@ -1,5 +1,5 @@
 import React from "react"
-import { Link, useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { Button, Icon, Label } from "semantic-ui-react"
 
 
@@ -30,5 +30,3 @@ function CommentPart({post: {countComments, id}, user}) {
 }
 
 export default CommentPart
-
-// as={Link} to={`posts/${postID}`}

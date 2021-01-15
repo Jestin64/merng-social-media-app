@@ -2,12 +2,12 @@ import { useMutation } from "@apollo/react-hooks"
 import React, { useEffect, useState } from "react"
 import { Button, Icon, Label } from "semantic-ui-react"
 import gql from "graphql-tag"
-import { Link, useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 
 
 const LIKEPOST = gql`
-mutation likepost($postId: ID!){
-    likePost(postId: $postId) {
+mutation likepost($postId: ID!){ 
+    likePost(postId: $postId){
         id
         likes {
           id
@@ -33,11 +33,7 @@ function LikePart({ post: { id, countLikes, likes }, user }) {
     }, [likes, user])  // update based on likes not like variable
 
     function handleOnClick() {
-        if(user){
-            LikePost()
-        } else {
-            history.push('/login')
-        } 
+        user ? LikePost() : history.push('/login')
     }
     
     return (
