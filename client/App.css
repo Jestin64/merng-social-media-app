@@ -1,3 +1,13 @@
+html {
+    height: 100%;
+}
+
+.app{
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
 .grid-row-header{
     align-items: center !important;
     margin-top: 10px;
@@ -26,8 +36,9 @@
 .footer{
     background-color: #000000;
     position: relative;
-    margin: 0;
+    margin-top: 0;
     text-align: center;
     border: 0;
     padding:0;
+    overflow-y: hidden;
 }

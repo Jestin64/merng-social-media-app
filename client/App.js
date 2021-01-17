@@ -16,7 +16,7 @@ import AuthRoute from "./components/util/AuthRoute.js"
 
 export default function App() {
     return(
-        <div>
+        <div className="app">
             <AuthProvider >
                 <Container >
                     <BrowserRouter>

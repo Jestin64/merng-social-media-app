@@ -1,9 +1,9 @@
+//simple footer component with  a popup
 import React from 'react'
 import { Menu, Popup, Button } from 'semantic-ui-react'
 
 
 export default function Footer() {
-   //simple footer component with  a popup
     return (
         // use footer tag to eliminate the position hurdles when using div
         <footer className="footer">
