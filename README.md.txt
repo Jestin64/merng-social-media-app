@@ -1,1 +1,0 @@
-full stack application with graphql
