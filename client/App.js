@@ -25,7 +25,7 @@ export default function App() {
                             <Route exact path="/" component={Home} />
                             <AuthRoute exact path="/login" component={Login} />
                             <AuthRoute exact path="/register" component={Register} />
-                            <AuthRoute exact path="/posts/:postId" component={Post} /> 
+                            <Route exact path="/posts/:postId" component={Post} /> 
                             <Route path="*" component={()=><h1>404 error, page not found</h1>} />
                         </Switch> 
                         <Footer /> 

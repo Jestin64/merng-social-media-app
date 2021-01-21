@@ -19,7 +19,6 @@ function CommentPart({post: {countComments, id}, user}) {
         <Button as="div" labelPosition="right" >
             <Button color="teal" basic onClick={commentOnPost} >
                 <Icon name="comments outline" />
-                    comment
             </Button>
             <Label basic color="teal" pointing="left">
                 {countComments}

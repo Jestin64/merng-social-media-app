@@ -38,7 +38,9 @@ export default function PostForm() {
     function handleSubmit(e) {
         e.preventDefault()
         MakePost()
+        window.location.reload()
     }
+
 
     return (
         <>

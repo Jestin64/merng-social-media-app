@@ -17,8 +17,10 @@ mutation likepost($postId: ID!){
     }
 }
 `
+
 //remember likes is an array!
-function LikePart({ post: { id, countLikes, likes }, user }) {
+function LikeButton({ post: { id, countLikes, likes }, user }) {
+    console.log(likes)
     const history = useHistory()
     const [like, setLike] = useState(false)
     const [LikePost] = useMutation(LIKEPOST, {
@@ -38,7 +40,7 @@ function LikePart({ post: { id, countLikes, likes }, user }) {
     
     return (
         <div>
-            <Button as='div' labelPosition='right'>
+            <Button as='div' labelPosition="left">
                 <Button color='teal' basic={like? false:true} onClick={handleOnClick}>
                     <Icon name={like?'thumbs down':'thumbs up'} />
                     {like? 'unlike': 'like'}
@@ -52,4 +54,4 @@ function LikePart({ post: { id, countLikes, likes }, user }) {
     )
 }
 
-export default LikePart
+export default LikeButton

@@ -16,7 +16,7 @@ export default function Navbar() {
 
     //render the home page as is, render the profile : login and the logout: register if logged in
     return (
-        <div>
+        <div className="navbar">
             <Menu pointing secondary size="massive" color="teal">
                 <Menu.Item
                     name="home"

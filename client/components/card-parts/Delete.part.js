@@ -1,17 +1,34 @@
+// used in PostCard component
+
 import { useMutation } from "@apollo/react-hooks"
 import React, { useState } from "react"
-import { Button, Icon, Label } from "semantic-ui-react"
+import { Button, Icon, Label, Confirm } from "semantic-ui-react"
 import gql from "graphql-tag"
 
 
-const DELETEPOST = gql`
-mutation deleteComment($postId: ID!){
-    deleteComment(postId: $postId)
+const DELETE_POST = gql`
+mutation deletePost($postId: ID!){
+    deletePost(postId: $postId)
+}
+`
+const DELETE_COMMENT = gql`
+mutation deleteComment($postId: ID!, $commentId: ID!){
+    deleteComment(postId: $postId, commentId: $commentId) {
+        id
+        body
+        username
+        createdAt
+        countLikes
+        countComments
+        likes { id createdAt username }
+        comments { id createdAt username body }
+    }
 }
 `
 
-function DeleteButton({post: {id}, user}) {
-    const [deletePost] = useMutation(DELETEPOST,{
+function DeleteButton({post: {id}, postOrComment, commentId='default_placeholder'}) {
+    //delete post part
+    const [deletePost] = useMutation(DELETE_POST,{
         onError(err){
             throw new Error(err)
         },
@@ -19,20 +36,34 @@ function DeleteButton({post: {id}, user}) {
             postId: id
         }
     })
-
-
-    function HandleDelete(e) {
+    function HandleDeletePost(e) {
         e.preventDefault()
-        console.log("delete post triggered")
-        deletePost()
+        deletePost() 
+        window.location.reload()
     }
+
+    // delete comment part
+    const [deleteComment] = useMutation(DELETE_COMMENT,{
+        onError(err){
+            throw new Error(err)
+        },
+        variables:{
+            postId: id,
+            commentId: commentId
+        }
+    })
+    function HandleDeleteComment(e){
+        e.preventDefault()
+        deleteComment() 
+    }
+
 
     return (
         <div>
             <Button
                 color="red"
-                floated="right"
-                onClick={HandleDelete}
+                floated="left"
+                onClick={postOrComment ? HandleDeletePost: HandleDeleteComment}
             >
                 <Icon name="trash" style={{ margin: "0" }} />
             </Button>

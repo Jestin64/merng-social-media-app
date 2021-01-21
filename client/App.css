@@ -1,11 +1,28 @@
 html {
+    font-size: 70%;
     height: 100%;
 }
 
 .app{
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
+    position: relative;
+    min-height: 100vh;
+}
+
+.home{
+    padding-bottom: 10vh;
+}
+.comment{
+    padding-bottom: 10vh;
+}
+
+.footer{
+    background-color: #000000;
+    position: absolute;
+    bottom: 0; 
+    border:0; 
+    height: auto;
+    width: 100%;
+    left: 0;
 }
 
 .grid-row-header{
@@ -33,12 +50,12 @@ html {
     margin-bottom: 10px !important;
 }
 
-.footer{
-    background-color: #000000;
-    position: relative;
-    margin-top: 0;
-    text-align: center;
-    border: 0;
-    padding:0;
-    overflow-y: hidden;
+.post-card{
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.card-extra{
+    display: flex;
+    flex-direction: row;
 }
