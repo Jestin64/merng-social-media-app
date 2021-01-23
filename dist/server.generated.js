@@ -474,7 +474,7 @@ module.exports = userResolvers;
   \************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 61:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 62:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const {
@@ -526,6 +526,7 @@ const typeDefs = gql`
         password: String!
         confirmPassword: String!
     }
+
 
     type Mutation{
         registerUser(registerInput: RegisterInput!): User!

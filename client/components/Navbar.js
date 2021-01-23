@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { Menu } from 'semantic-ui-react'
+import { Menu, Icon } from 'semantic-ui-react'
 import { AuthContext } from "../context/auth.context"
 
 
@@ -24,7 +24,10 @@ export default function Navbar() {
                     active={activeItem === 'home'}
                     as={Link}
                     to="/"
-                />
+                    style={{color:'white', }}
+                > <Icon name="home" style={{ margin: "auto", padding:"0"}} />
+                        Home
+                </Menu.Item>
                 <Menu.Menu position="right">
                     {context.user ? (
                         <>
@@ -34,7 +37,9 @@ export default function Navbar() {
                                 active={activeItem === 'profile'}
                                 as={Link}
                                 to="/profile"
-                            />
+                                style={{color:'white', }}
+                            > <Icon name="user circle" style={{ margin: "auto", padding:"0"}} /> {context.user.username}
+                            </Menu.Item>
 
                             <Menu.Item
                                 name="logout"
@@ -42,7 +47,9 @@ export default function Navbar() {
                                 active={activeItem === 'logout'}
                                 as={Link}
                                 to="/login"
-                            />
+                                style={{color:'white', }}
+                            > <Icon name="log out" style={{ margin: "auto", padding:"0"}} /> Logout
+                            </Menu.Item>
                         </>
                     ): (
                         <>
@@ -52,7 +59,9 @@ export default function Navbar() {
                                 active={activeItem === 'login'}
                                 as={Link}
                                 to="/login"
-                            />
+                                style={{color:'white', }}
+                            > <Icon name="sign in" style={{ margin: "auto", padding:"0"}} /> Login
+                            </Menu.Item>
 
                             <Menu.Item
                                 name="register"
@@ -60,7 +69,9 @@ export default function Navbar() {
                                 active={activeItem === 'register'}
                                 as={Link}
                                 to="/register"
-                            />
+                                style={{color:'white', }}
+                            > <Icon name="signup" style={{ margin: "auto", padding:"0"}} /> Register
+                            </Menu.Item>
                         </>
                     )}
                 </Menu.Menu>

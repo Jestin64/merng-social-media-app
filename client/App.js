@@ -10,6 +10,7 @@ import Home from "./components/paths/Home.path.js"
 import Login from "./components/paths/Login.path.js"
 import Register from "./components/paths/Register.path.js"
 import Post from "./components/paths/Post.path.js"
+import Profile from "./components/paths/Profile.path.js"
 import {AuthProvider} from "./context/auth.context.js"
 import AuthRoute from "./components/util/AuthRoute.js"
 
@@ -25,6 +26,7 @@ export default function App() {
                             <Route exact path="/" component={Home} />
                             <AuthRoute exact path="/login" component={Login} />
                             <AuthRoute exact path="/register" component={Register} />
+                            <Route exact path="/profile/" component={Profile} />
                             <Route exact path="/posts/:postId" component={Post} /> 
                             <Route path="*" component={()=><h1>404 error, page not found</h1>} />
                         </Switch> 

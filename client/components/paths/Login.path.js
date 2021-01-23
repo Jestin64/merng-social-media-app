@@ -58,59 +58,65 @@ function Login() {
     }
 
     return (
-        <div className="ui center aligned column grid">
-            <Card className="card-login">
-                <Card.Header className="card-login-header">Login</Card.Header>
-                <Card.Content>
-                    <Form onSubmit={handleSubmit} className={loading ? 'loading': ''}>
-                        <Form.Field >                           
-                            <Form.Input placeholder="enter your username" 
-                                label="Username"
-                                name="username"
-                                type="text"                                             
-                                value={values.username}
-                                error={errors.username? true:false}
-                                onChange={handleOnChange}
-                            />
-                        </Form.Field>
-                        <Form.Field >
-                            <Form.Input placeholder="enter your password"
-                                label="Password"
-                                name="password"
-                                type="password"  
-                                error={errors.password? true:false}          
-                                value={values.password}
-                                onChange={handleOnChange}
-                            />
-                        </Form.Field>
-                        <Button type="submit">Sign In</Button>
-                    </Form>
+        <div className="login">
+            <div className="ui center aligned column grid" >
+                <Card className="card-login">
+                    <Card.Header className="card-login-header">Login</Card.Header>
+                    <Card.Content>
+                        <Form onSubmit={handleSubmit} className={loading ? 'loading': ''}>
+                            <Form.Field >                           
+                                <Form.Input placeholder="enter your username" 
+                                    label="Username"
+                                    name="username"
+                                    type="text"                                             
+                                    value={values.username}
+                                    error={errors.username? true:false}
+                                    onChange={handleOnChange}
+                                />
+                            </Form.Field>
+                            <Form.Field >
+                                <Form.Input placeholder="enter your password"
+                                    label="Password"
+                                    name="password"
+                                    type="password"  
+                                    error={errors.password? true:false}          
+                                    value={values.password}
+                                    onChange={handleOnChange}
+                                />
+                            </Form.Field>
 
-                </Card.Content>
+                            <Button type="submit"> 
+                                <Icon name="sign in" style={{ margin: "auto", padding:"0"}} /> Sign In
+                            </Button>
 
-                <Card.Description className="card-description" 
-                as={Link}
-                to = '/register'              
-                > <Icon name="help"/>
-                    no account? register here
-                </Card.Description>
+                        </Form>
 
-                {
-                        Object.keys(errors).length > 0 && (
-                            <div className="ui error message">
-                                <ul className="list">
-                                    {
-                                        Object.values(errors).map(e_val=>{
-                                            return(
-                                                <li key={e_val}>{e_val}</li>
-                                            )
-                                        })
-                                    }
-                                </ul>
-                            </div>
-                        )                  
-                    }
-            </Card>
+                    </Card.Content>
+
+                    <Card.Description className="card-description" 
+                        as={Link}
+                        to = '/register'
+                    > <Icon name="help"/>
+                        no account? register here
+                    </Card.Description>
+
+                    {
+                            Object.keys(errors).length > 0 && (
+                                <div className="ui error message">
+                                    <ul className="list">
+                                        {
+                                            Object.values(errors).map(e_val=>{
+                                                return(
+                                                    <li key={e_val}>{e_val}</li>
+                                                )
+                                            })
+                                        }
+                                    </ul>
+                                </div>
+                            )                  
+                        }
+                </Card>
+            </div>
         </div>
     )
 }

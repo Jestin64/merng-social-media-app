@@ -20,7 +20,6 @@ mutation likepost($postId: ID!){
 
 //remember likes is an array!
 function LikeButton({ post: { id, countLikes, likes }, user }) {
-    console.log(likes)
     const history = useHistory()
     const [like, setLike] = useState(false)
     const [LikePost] = useMutation(LIKEPOST, {

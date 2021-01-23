@@ -27,8 +27,12 @@ mutation deleteComment($postId: ID!, $commentId: ID!){
 `
 
 function DeleteButton({post: {id}, postOrComment, commentId='default_placeholder'}) {
+    const [confirmDelete, setConfirmDelete] = useState(false)
     //delete post part
     const [deletePost] = useMutation(DELETE_POST,{
+        update(proxy, result){
+            window.location.reload()
+        },
         onError(err){
             throw new Error(err)
         },
@@ -39,7 +43,6 @@ function DeleteButton({post: {id}, postOrComment, commentId='default_placeholder
     function HandleDeletePost(e) {
         e.preventDefault()
         deletePost() 
-        window.location.reload()
     }
 
     // delete comment part
@@ -63,10 +66,15 @@ function DeleteButton({post: {id}, postOrComment, commentId='default_placeholder
             <Button
                 color="red"
                 floated="left"
-                onClick={postOrComment ? HandleDeletePost: HandleDeleteComment}
+                onClick={()=>setConfirmDelete(true)}
             >
                 <Icon name="trash" style={{ margin: "0" }} />
             </Button>
+            <Confirm 
+                open = {confirmDelete}
+                onCancel= {()=>setConfirmDelete(false)}
+                onConfirm= {postOrComment ? HandleDeletePost: HandleDeleteComment}
+            />
         </div>
     )
 }

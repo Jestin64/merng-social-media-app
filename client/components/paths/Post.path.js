@@ -15,9 +15,22 @@ import DeleteButton from "../card-parts/Delete.part.js"
 const GETPOST = gql`
 query ($postId: ID!){
     getPost(postId: $postId) {
-        id username body createdAt countLikes countComments
-        comments{ id body username createdAt } 
-        likes{ id username createdAt } 
+        id
+        username
+        body
+        comments {
+            id
+            body
+            username
+            createdAt
+        }
+        likes {
+            id
+            createdAt
+            username
+        }
+        countLikes
+        countComments
     }
 }
 `
@@ -82,10 +95,9 @@ export default function Post(props) {
     if (getPost) {
         var { id, body, createdAt, username, countLikes, countComments, comments, likes } = getPost
     }
-    console.log("likes: ", likes)
 
     return (
-        <div>
+        <div className="single-post">
             {/* post body with meta data */}
             {getPost &&
                 <>
@@ -98,19 +110,13 @@ export default function Post(props) {
                             <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
                             <Card.Description > {body} </Card.Description>
                         </Card.Content>
-                        <Card.Content className="card-extra" >
-                            <LikeButton
-                                user={user}
-                                post={{ id, likes, countLikes }}
-                            />
-                        </Card.Content>
                     </Card>
 
                     {/* form reply */}
                     <Comment.Group>
-                        <Header as='h3' dividing>
+                        <Header as='h3' dividing style={{color:'white'}}>
                             Comments
-                </Header>
+                        </Header>
                     </Comment.Group>
                     <Form reply onSubmit={handleSubmit} className={comment_loading ? "loading" : ''}>
                         <Form.TextArea value={commentBody} onChange={handleOnChange} />
@@ -123,7 +129,12 @@ export default function Post(props) {
                             return (
                                 <>
                                 <Card fluid key={index} style={{ minWidth: "50%" }}>
-                                    <Comment.Avatar style={{ padding: "5px", }} floated='right' size='mini' src='https://react.semantic-ui.com/images/avatar/small/steve.jpg' />
+                                    <Comment.Avatar 
+                                        style={{ padding: "5px", }} 
+                                        floated='right' 
+                                        size='mini' 
+                                        src='https://react.semantic-ui.com/images/avatar/small/steve.jpg' 
+                                    />
                                     <Comment.Content>
                                         <Comment.Author >{comment.username}</Comment.Author>
                                         <Comment.Metadata>
@@ -133,7 +144,7 @@ export default function Post(props) {
                                             <p>{comment.body}</p>
                                         </Comment.Text>
 
-                                        {user.username === comment.username && (
+                                        {user && user.username === comment.username && (
                                             <DeleteButton 
                                                 post={{id}}
                                                 postOrComment={false}

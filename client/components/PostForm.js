@@ -23,6 +23,7 @@ export default function PostForm() {
     const [MakePost, { loading, error }] = useMutation(POST, {
         update(proxy, result) {
             setBody('')  // reset body field after making the post
+            window.location.reload()
         },
         variables: {
             body: body
@@ -38,7 +39,6 @@ export default function PostForm() {
     function handleSubmit(e) {
         e.preventDefault()
         MakePost()
-        window.location.reload()
     }
 
 
