@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken")
 const { UserInputError } = require("apollo-server")
 
 const User = require("../../models/user.model")
+const Post = require("../../models/post.model")
 const { SECRET_KEY } = require("../../../config")
 const { validateRegisterData, validateLogin } = require("../../controllers/validators")
 
@@ -93,6 +94,27 @@ const userResolvers = {
                 ...user._doc,
                 id: user._id,
                 token
+            }
+        },
+
+        async deleteUser(_,{ userId: id }){
+            try {
+                const user = await User.findById(id)
+                if (user) {
+                    // delete all posts the user has 
+                    const posts = await Post.find()  // retrieve all posts and loop through to find all posts made by the user and delete them
+                    if(posts){
+                        posts.map(post=>{
+                            if(post.username === user.username){
+                                post.delete()
+                            }
+                        })
+                    }
+                    user.delete()                   
+                    return 'User Deleted'
+                } else throw new Error("something went wrong")               
+            } catch (e) {
+                throw new Error(e)
             }
         }
     }

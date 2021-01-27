@@ -4,16 +4,35 @@
 // ii) password change
 
 import React, { useContext, useState } from "react"
+import {useHistory} from "react-router-dom"
+import {useMutation} from "@apollo/react-hooks"
+import gql from "graphql-tag"
 import {Button, Form, Label, Icon, Confirm } from "semantic-ui-react"
-import { AuthContext } from "../../context/auth.context"
+import { AuthContext } from "../../context/auth.context.js"
 
+const DELETE_USER = gql`
+mutation deleteUser($userId: ID!){
+    deleteUser(userId: $userId)
+}
+`
 
 export default function Profile(){
+    const history = useHistory()
     const [confirmDelete, setConfirmDelete] = useState(false)
 
-    const {user} = useContext(AuthContext)
+    const {user, logout} = useContext(AuthContext)
     const [editView, setEditView] = useState(false)
 
+    const [deleteUser] = useMutation(DELETE_USER, {
+        update(proxy, result){
+            alert("Account deleted")
+            history.push('/')       // push first and then logout else will get error since logout still in profile page
+            logout()  
+        },
+        variables:{
+            userId: user.id  
+        }
+    })
 
     function handleEditView(e){
         e.preventDefault()
@@ -23,6 +42,7 @@ export default function Profile(){
     function handleDeleteAccount(e){
         e.preventDefault()
         console.log("delete account triggered")
+        deleteUser()
     }
 
 

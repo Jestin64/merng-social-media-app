@@ -327,7 +327,7 @@ module.exports = postResolvers;
   \****************************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 135:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 163:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const bscript = __webpack_require__(/*! bcryptjs */ "bcryptjs");
@@ -339,6 +339,8 @@ const {
 } = __webpack_require__(/*! apollo-server */ "apollo-server");
 
 const User = __webpack_require__(/*! ../../models/user.model */ "./server/models/user.model.js");
+
+const Post = __webpack_require__(/*! ../../models/post.model */ "./server/models/post.model.js");
 
 const {
   SECRET_KEY
@@ -460,6 +462,32 @@ const userResolvers = {
         id: user._id,
         token
       };
+    },
+
+    async deleteUser(_, {
+      userId: id
+    }) {
+      try {
+        const user = await User.findById(id);
+
+        if (user) {
+          // delete all posts the user has 
+          const posts = await Post.find(); // retrieve all posts and loop through to find all posts made by the user and delete them
+
+          if (posts) {
+            posts.map(post => {
+              if (post.username === user.username) {
+                post.delete();
+              }
+            });
+          }
+
+          user.delete();
+          return 'User Deleted';
+        } else throw new Error("something went wrong");
+      } catch (e) {
+        throw new Error(e);
+      }
     }
 
   }
@@ -527,9 +555,9 @@ const typeDefs = gql`
         confirmPassword: String!
     }
 
-
     type Mutation{
         registerUser(registerInput: RegisterInput!): User!
+        deleteUser(userId: ID!): String!
         login(username: String!, password: String!): User!
         createPost(body: String!): Post!
         deletePost(postId: ID!): String!

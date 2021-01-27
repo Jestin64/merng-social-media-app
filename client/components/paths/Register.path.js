@@ -41,11 +41,9 @@ function Register() {
     })
 
     const [errors, setErrors] = React.useState({})
-    //console.log(errors)
 
     const [addUser, {loading}] = useMutation(REGISTER_USER,{
         update(proxy, result){
-            context.login(result.data.login)
             history.push('/login')
         },
         onError(err){

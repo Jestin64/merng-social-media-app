@@ -1,4 +1,4 @@
-const {gql} = require("apollo-server")
+const { gql } = require("apollo-server")
 
 const typeDefs = gql`
     type Query{
@@ -46,9 +46,9 @@ const typeDefs = gql`
         confirmPassword: String!
     }
 
-
     type Mutation{
         registerUser(registerInput: RegisterInput!): User!
+        deleteUser(userId: ID!): String!
         login(username: String!, password: String!): User!
         createPost(body: String!): Post!
         deletePost(postId: ID!): String!
