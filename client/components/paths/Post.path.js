@@ -1,6 +1,6 @@
 // single post page with post , like, comments, comment-deletion
 
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 import gql from "graphql-tag"
 import { useMutation, useQuery } from "@apollo/react-hooks"
 import moment from "moment"
@@ -8,7 +8,8 @@ import { Card, Image, Button, Comment, Form, Header } from 'semantic-ui-react'
 import { useHistory } from "react-router-dom"
 
 import { AuthContext } from "../../context/auth.context.js"
-import LikeButton from "../card-parts/Like.part.js"
+// import LikeButton from "../card-parts/Like.part.js"
+import EditButton from "../card-parts/Edit.part.js"
 import DeleteButton from "../card-parts/Delete.part.js"
 
 
@@ -109,6 +110,9 @@ export default function Post(props) {
                             <Card.Header>{username}</Card.Header>
                             <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
                             <Card.Description > {body} </Card.Description>
+                            <EditButton
+                                post={{ id }}
+                            />
                         </Card.Content>
                     </Card>
 

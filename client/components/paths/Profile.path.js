@@ -16,6 +16,7 @@ mutation deleteUser($userId: ID!){
 }
 `
 
+
 export default function Profile(){
     const history = useHistory()
     const [confirmDelete, setConfirmDelete] = useState(false)
@@ -33,6 +34,11 @@ export default function Profile(){
             userId: user.id  
         }
     })
+
+    function handleOnSubmit(e){
+        e.preventDefault()
+        console.log("submit triggered")
+    }
 
     function handleEditView(e){
         e.preventDefault()
@@ -66,6 +72,13 @@ export default function Profile(){
                                 name="username"                                
                             />
                         </Form.Field>
+                        <Form.Field >
+                            <Form.Input placeholder="enter your new email" 
+                                label="Email"
+                                type="text"                               
+                                name="email"                                
+                            />
+                        </Form.Field>
                         <Form.Field>
                             <Form.Input placeholder="enter your new password" 
                                 label="Password"
@@ -84,6 +97,14 @@ export default function Profile(){
                     </Form>
                 </div>
             )}
+
+            {editView && <Button 
+                color="blue"
+                onClick={handleOnSubmit}
+            ><Icon name="save" style={{ margin: "0" }}/>
+                Submit
+            </Button>}
+
             <Button 
                 color="teal"
                 onClick = {handleEditView}

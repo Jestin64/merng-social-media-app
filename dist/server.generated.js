@@ -160,7 +160,7 @@ module.exports = resolvers;
   \****************************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 155:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 173:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const Post = __webpack_require__(/*! ../../models/post.model */ "./server/models/post.model.js");
@@ -171,6 +171,10 @@ const {
   AuthenticationError,
   UserInputError
 } = __webpack_require__(/*! apollo-server */ "apollo-server");
+
+const {
+  update
+} = __webpack_require__(/*! ../../models/post.model */ "./server/models/post.model.js");
 
 const postResolvers = {
   Query: {
@@ -215,6 +219,20 @@ const postResolvers = {
       });
       const post = await new_post.save();
       return post;
+    },
+
+    async editPost(_, {
+      postId,
+      body
+    }) {
+      if (body.trim() === '') throw new UserInputError('Post body cannot be empty');
+      const updatedpost = await Post.findById(postId);
+
+      if (updatedpost) {
+        updatedpost.body = body;
+        updatedpost.save();
+        return updatedpost;
+      }
     },
 
     async deletePost(_, {
@@ -327,7 +345,7 @@ module.exports = postResolvers;
   \****************************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 163:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 208:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const bscript = __webpack_require__(/*! bcryptjs */ "bcryptjs");
@@ -338,18 +356,20 @@ const {
   UserInputError
 } = __webpack_require__(/*! apollo-server */ "apollo-server");
 
-const User = __webpack_require__(/*! ../../models/user.model */ "./server/models/user.model.js");
+const User = __webpack_require__(/*! ../../models/user.model.js */ "./server/models/user.model.js");
 
-const Post = __webpack_require__(/*! ../../models/post.model */ "./server/models/post.model.js");
+const Post = __webpack_require__(/*! ../../models/post.model.js */ "./server/models/post.model.js");
+
+const authCheck = __webpack_require__(/*! ../../controllers/check-auth.js */ "./server/controllers/check-auth.js");
 
 const {
   SECRET_KEY
-} = __webpack_require__(/*! ../../../config */ "./config.js");
+} = __webpack_require__(/*! ../../../config.js */ "./config.js");
 
 const {
   validateRegisterData,
   validateLogin
-} = __webpack_require__(/*! ../../controllers/validators */ "./server/controllers/validators.js");
+} = __webpack_require__(/*! ../../controllers/validators.js */ "./server/controllers/validators.js");
 
 function generateToken(res) {
   return jwt.sign({
@@ -488,6 +508,49 @@ const userResolvers = {
       } catch (e) {
         throw new Error(e);
       }
+    },
+
+    async editUser(_, {
+      editInput: {
+        userId,
+        username,
+        email,
+        password,
+        confirmPassword
+      }
+    }) {
+      const {
+        valid,
+        errors
+      } = validateRegisterData(username, email, password, confirmPassword);
+
+      if (!valid) {
+        throw new Error(errors);
+      } //generate new password hash and update 
+
+
+      password = await bscript.hash(password, 12);
+
+      try {
+        const updatedUser = await User.findOneAndUpdate({
+          id: userId
+        }, {
+          username,
+          email,
+          password
+        });
+        return updatedUser;
+      } catch (e) {
+        throw new UserInputError(e);
+      } // const updatedUser = await User.findById(userId)
+      // if(updatedUser){
+      //     updatedUser.username = username
+      //     updatedUser.email = email
+      //     updatedUser.password = password
+      //     updatedUser.save()
+      //     return updatedUser
+      // }    
+
     }
 
   }
@@ -502,7 +565,7 @@ module.exports = userResolvers;
   \************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 62:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 72:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const {
@@ -555,11 +618,21 @@ const typeDefs = gql`
         confirmPassword: String!
     }
 
+    input EditInput{
+        userId: ID!
+        username: String!
+        email: String!
+        password: String!
+        confirmPassword: String!
+    }
+
     type Mutation{
         registerUser(registerInput: RegisterInput!): User!
+        editUser(editInput: EditInput!): User!
         deleteUser(userId: ID!): String!
         login(username: String!, password: String!): User!
         createPost(body: String!): Post!
+        editPost(postId: ID!, body: String!): Post!
         deletePost(postId: ID!): String!
         commentPost(postId: ID!, body: String!): Post!
         deleteComment(postId: ID!, commentId: ID!): Post!

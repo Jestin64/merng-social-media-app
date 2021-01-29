@@ -39,10 +39,6 @@ function Home() {
         throw new Error(error)
     }
 
-    //variables for pagination
-    const postsPerPage = 3
-    const start = 0
-
     return (
 
         <div className="home" >
@@ -66,7 +62,7 @@ function Home() {
                                  loading
                                     ? <h3>loading...</h3>
                                     : 
-                                    posts && posts.slice(start, start+postsPerPage).map(post => {
+                                    posts && posts.map(post => {
                                         return (
                                             <Grid.Column key={post.id}>
                                                 <PostCard
@@ -79,17 +75,8 @@ function Home() {
                         </Grid.Row>
                     </Grid>
                 </Transition.Group>
-            </div>
-            <Pagination
-                boundaryRange={0}
-                defaultActivePage={1}
-                ellipsisItem={null}
-                firstItem={null}
-                lastItem={null}
-                siblingRange={1}
-                totalPages={posts? Math.ceil(posts.length/postsPerPage): 1 }  //posts can be undefined at the start
-                
-            />
+            </div> 
+
         </div>
     )
 }

@@ -2,10 +2,11 @@ const bscript = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const { UserInputError } = require("apollo-server")
 
-const User = require("../../models/user.model")
-const Post = require("../../models/post.model")
-const { SECRET_KEY } = require("../../../config")
-const { validateRegisterData, validateLogin } = require("../../controllers/validators")
+const User = require("../../models/user.model.js")
+const Post = require("../../models/post.model.js")
+const authCheck = require("../../controllers/check-auth.js")
+const { SECRET_KEY } = require("../../../config.js")
+const { validateRegisterData, validateLogin } = require("../../controllers/validators.js")
 
 
 function generateToken(res) {
@@ -116,7 +117,32 @@ const userResolvers = {
             } catch (e) {
                 throw new Error(e)
             }
-        }
+        },
+
+        async editUser(_, {editInput: {userId, username, email, password, confirmPassword}}){
+            const {valid, errors} = validateRegisterData(username, email, password, confirmPassword)
+            if(!valid){
+                throw new Error(errors)
+            }
+
+            //generate new password hash and update 
+            password = await bscript.hash(password, 12)
+            try{
+                const updatedUser = await User.findOneAndUpdate({id: userId}, {username, email, password})
+                return updatedUser
+            } catch(e){
+                throw new UserInputError(e)
+            }
+
+            // const updatedUser = await User.findById(userId)
+            // if(updatedUser){
+            //     updatedUser.username = username
+            //     updatedUser.email = email
+            //     updatedUser.password = password
+            //     updatedUser.save()
+            //     return updatedUser
+            // }    
+        },
     }
 }
 

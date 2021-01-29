@@ -46,11 +46,21 @@ const typeDefs = gql`
         confirmPassword: String!
     }
 
+    input EditInput{
+        userId: ID!
+        username: String!
+        email: String!
+        password: String!
+        confirmPassword: String!
+    }
+
     type Mutation{
         registerUser(registerInput: RegisterInput!): User!
+        editUser(editInput: EditInput!): User!
         deleteUser(userId: ID!): String!
         login(username: String!, password: String!): User!
         createPost(body: String!): Post!
+        editPost(postId: ID!, body: String!): Post!
         deletePost(postId: ID!): String!
         commentPost(postId: ID!, body: String!): Post!
         deleteComment(postId: ID!, commentId: ID!): Post!

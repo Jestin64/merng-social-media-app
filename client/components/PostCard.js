@@ -9,7 +9,6 @@ import DeleteButton from "./card-parts/Delete.part.js"
 import { AuthContext } from "../context/auth.context.js"
 
 
-
 function PostCard({ post: { id, body, username, likes, comments, createdAt, countLikes, countComments } }) {
     const { user } = useContext(AuthContext)
 
@@ -38,11 +37,15 @@ function PostCard({ post: { id, body, username, likes, comments, createdAt, coun
                         user={user}
                         post={{ id, countComments }}
                     />
+
                     {user && user.username === username && (
-                        <DeleteButton  
-                            postOrComment={true} 
-                            post={{id}} 
-                        />
+                        <>
+                            <DeleteButton
+                                postOrComment={true}
+                                post={{ id }}
+                            />
+
+                        </>
                     )}
                 </Card.Content>
             </Card>

@@ -1,6 +1,7 @@
 const Post = require("../../models/post.model")
 const authCheck = require("../../controllers/check-auth")
 const { AuthenticationError,UserInputError } = require("apollo-server")
+const { update } = require("../../models/post.model")
 
 
 const postResolvers = {
@@ -46,6 +47,18 @@ const postResolvers = {
 
             const post = await new_post.save()
             return post
+        },
+
+        async editPost(_, {postId, body}){
+            if(body.trim() === '')
+                throw new UserInputError('Post body cannot be empty')
+
+            const updatedpost = await Post.findById(postId)
+            if(updatedpost){
+                updatedpost.body = body
+                updatedpost.save()
+                return updatedpost
+            }
         },
 
         async deletePost(_, { postId }, context) {

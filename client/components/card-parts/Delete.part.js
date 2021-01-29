@@ -2,7 +2,7 @@
 
 import { useMutation } from "@apollo/react-hooks"
 import React, { useState } from "react"
-import { Button, Icon, Label, Confirm } from "semantic-ui-react"
+import { Button, Icon, Confirm } from "semantic-ui-react"
 import gql from "graphql-tag"
 
 
