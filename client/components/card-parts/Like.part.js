@@ -38,7 +38,7 @@ function LikeButton({ post: { id, countLikes, likes }, user }) {
     }
     
     return (
-        <div>
+        <div style={{marginBottom: "4px"}}>
             <Button as='div' labelPosition="left">
                 <Button color='teal' basic={like? false:true} onClick={handleOnClick}>
                     <Icon name={like?'thumbs down':'thumbs up'} />

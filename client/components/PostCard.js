@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import moment from "moment"
 
 import LikeButton from "./card-parts/Like.part.js"
+import EditButton from "./card-parts/Edit.part.js"
 import CommentButton from "./card-parts/Comment.part.js"
 import DeleteButton from "./card-parts/Delete.part.js"
 import { AuthContext } from "../context/auth.context.js"
@@ -13,8 +14,8 @@ function PostCard({ post: { id, body, username, likes, comments, createdAt, coun
     const { user } = useContext(AuthContext)
 
     return (
-        <div>
-            <Card fluid style={{ margin: '3%' }} className="post-card">
+        <div className="postcard" >
+            <Card fluid style={{ margin: '3%' }} >
                 {/* post body */}
                 <Card.Content>
                     <Image floated='right' size='mini'
@@ -26,6 +27,7 @@ function PostCard({ post: { id, body, username, likes, comments, createdAt, coun
                         {body}
                     </Card.Description>
                 </Card.Content>
+                    
 
                 {/* LikeButton and CommentButton*/}
                 <Card.Content className="card-extra" >
@@ -39,13 +41,17 @@ function PostCard({ post: { id, body, username, likes, comments, createdAt, coun
                     />
 
                     {user && user.username === username && (
-                        <>
+                        <div>
+                            <EditButton 
+                                post={{id}}
+                            />
+
                             <DeleteButton
                                 postOrComment={true}
                                 post={{ id }}
                             />
 
-                        </>
+                        </div>
                     )}
                 </Card.Content>
             </Card>

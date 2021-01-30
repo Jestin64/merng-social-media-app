@@ -67,6 +67,7 @@ function DeleteButton({post: {id}, postOrComment, commentId='default_placeholder
                 color="red"
                 floated="left"
                 onClick={()=>setConfirmDelete(true)}
+                style={{marginTop: '5px'}}
             >
                 <Icon name="trash" style={{ margin: "0" }} />
             </Button>

@@ -1,11 +1,11 @@
 import React, {useState} from "react"
 import { useMutation } from "@apollo/react-hooks"
-import { Button, Form } from 'semantic-ui-react'
+import { Button, Form, Confirm, Input } from 'semantic-ui-react'
 import gql from "graphql-tag"
 
 const EDIT_POST = gql`
-mutation editPost($postId: ID!){
-    EditPost(postId: $postId){
+mutation editPost($postId: ID!, $body: String!){
+    editPost(postId: $postId, body: $body){
         id
         body
         username
@@ -15,40 +15,57 @@ mutation editPost($postId: ID!){
 
 export default function EditButton({post: {id}}){
 
-    const [open, setOpen] = useState(true)
-    const [commentBody, setCommentBody] = useState('')
-    const [editPost] = useMutation(EDIT_POST, {
+    const [open, setOpen] = useState(false)
+    const [body, setBody] = useState('')
+    const [editPost, {loading, error}] = useMutation(EDIT_POST, {
         variables:{
-            postId: id
+            postId: id,
+            body: body
         }
     })
 
     function handleOnChange(e) {
         e.preventDefault()
-        setCommentBody(e.target.value)
+        setBody(e.target.value)
     }
 
     function handleEditClick(e){
         e.preventDefault()
-        //editPost()
-        console.log("edit post triggered")
+        editPost()
+        setOpen(false)
+    }
+
+    function textField(){
+       return (
+        <Input 
+            placeholder="enter here"
+            loading={loading}
+            focus
+            onChange={handleOnChange} 
+            style={{width: '100%'}}
+        />
+       ) 
     }
     
     return(
-        <div>
+        <div className="edit-post">
+
             <Button 
                 color="facebook"
                 floated="left"
-                onClick={()=>setOpen(!open)}
-                style={{marginTop: "2px"}}
-            > {open? 'Cancel': 'Edit Post'}
+                onClick = {()=>setOpen(true)}
+                style={{marginTop: "4px", marginBottom: "4px",}}
+            > Edit post
             </Button>
-            {open && (
-                <Form reply onSubmit={handleEditClick} >
-                    <Form.TextArea value={commentBody} onChange={handleOnChange} />
-                    <Button content='make change' labelPosition='left'  primary />
-                </Form>
-            )}
+
+            <Confirm
+                content={textField}
+                header='Edit your post'
+                open={open}
+                onCancel={()=>setOpen(false)}
+                onConfirm={handleEditClick}
+            />
+
         </div>
     )
 }

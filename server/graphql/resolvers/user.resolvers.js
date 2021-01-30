@@ -128,20 +128,24 @@ const userResolvers = {
             //generate new password hash and update 
             password = await bscript.hash(password, 12)
             try{
-                const updatedUser = await User.findOneAndUpdate({id: userId}, {username, email, password})
+                const user = await User.findById(userId)
+                const allposts = await Post.find() 
+                // go through all the posts and change the usernames in post, like and comments
+                allposts.map(post=>{
+                    post.username === user.username ? post.username = username: null
+                    post.likes.map(like => {
+                        like.username === user.username ? like.username = username: null
+                    })
+                    post.comments.map(comment=>{
+                        comment.username === user.username ? comment.username = username: null
+                    })
+                    post.save()
+                })
+                const updatedUser = await User.findOneAndUpdate({_id:userId}, {username, email, password}, {new:true})
                 return updatedUser
             } catch(e){
                 throw new UserInputError(e)
-            }
-
-            // const updatedUser = await User.findById(userId)
-            // if(updatedUser){
-            //     updatedUser.username = username
-            //     updatedUser.email = email
-            //     updatedUser.password = password
-            //     updatedUser.save()
-            //     return updatedUser
-            // }    
+            }   
         },
     }
 }

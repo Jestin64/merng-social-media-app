@@ -67,15 +67,8 @@ html {
     color: rgb(3, 85, 167);
 }
 
-.post-card{
-    display: flex;
-    flex-direction: row-reverse;
-}
-
-.card-extra{
-    display: flex;
-    flex-direction: row;
-    padding: 0;
+.card-extra {
+    font-size: 0.2%;
 }
 
 .profile-edit {

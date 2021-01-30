@@ -30,10 +30,10 @@ const FETCH_POSTS = gql`
 
 function Home() {
     const user = useContext(AuthContext)
-    
+
     const { loading, error, data } = useQuery(FETCH_POSTS)
     if (data) {
-        var {getPosts: posts} = data  // destructure the data part like this else you will get a unfound variable error  
+        var { getPosts: posts } = data  // destructure the data part like this else you will get a unfound variable error  
     }
     if (error) {
         throw new Error(error)
@@ -45,23 +45,22 @@ function Home() {
             <div className="ui container">
                 <Transition.Group >
                     <Grid columns={2}>
+                        {/* check is user is logged in and if so add a post form  
+                        make grid column with the postform component inside it */
+                            user && (
+                                <Grid.Column >
+                                    <PostForm />
+                                </Grid.Column>
+                            )
+                        }
                         <Grid.Row className="grid-row-header">
                             <h2>Recent Posts</h2>
                         </Grid.Row>
                         <Grid.Row>
-                            {/* check is user is logged in and if so add a post form  
-                        make grid column with the postform component inside it
-                    */
-                                user && (
-                                    <Grid.Column >
-                                        <PostForm />
-                                    </Grid.Column>
-                                )
-                            }
                             {
-                                 loading
+                                loading
                                     ? <h3>loading...</h3>
-                                    : 
+                                    :
                                     posts && posts.map(post => {
                                         return (
                                             <Grid.Column key={post.id}>
@@ -70,12 +69,12 @@ function Home() {
                                                 />
                                             </Grid.Column>
                                         )
-                                    })                                                                                                                                                                
+                                    })
                             }
                         </Grid.Row>
                     </Grid>
                 </Transition.Group>
-            </div> 
+            </div>
 
         </div>
     )

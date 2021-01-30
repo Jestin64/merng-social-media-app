@@ -9,7 +9,6 @@ import { useHistory } from "react-router-dom"
 
 import { AuthContext } from "../../context/auth.context.js"
 // import LikeButton from "../card-parts/Like.part.js"
-import EditButton from "../card-parts/Edit.part.js"
 import DeleteButton from "../card-parts/Delete.part.js"
 
 
@@ -110,9 +109,6 @@ export default function Post(props) {
                             <Card.Header>{username}</Card.Header>
                             <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
                             <Card.Description > {body} </Card.Description>
-                            <EditButton
-                                post={{ id }}
-                            />
                         </Card.Content>
                     </Card>
 
