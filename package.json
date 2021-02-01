@@ -45,7 +45,6 @@
     "webpack-node-externals": "^2.5.2"
   },
   "scripts": {
-    "build": "webpack --mode=production --config webpack.client.config.js && webpack --mode=production --config webpack.server.config.js",
     "dev": "nodemon",
     "client": "webpack serve --mode development --config webpack.client.config.js"
   }
