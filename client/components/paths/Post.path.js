@@ -8,8 +8,8 @@ import { Card, Image, Button, Comment, Form, Header } from 'semantic-ui-react'
 import { useHistory } from "react-router-dom"
 
 import { AuthContext } from "../../context/auth.context.js"
-// import LikeButton from "../card-parts/Like.part.js"
 import DeleteButton from "../card-parts/Delete.part.js"
+import EditButton from "../card-parts/Edit.part.js"
 
 
 const GETPOST = gql`
@@ -107,7 +107,7 @@ export default function Post(props) {
                                 src='https://react.semantic-ui.com/images/avatar/large/steve.jpg'
                             />
                             <Card.Header>{username}</Card.Header>
-                            <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
+                            <Card.Meta style={{color: "rgba(0,0,0,.4)"}}>{moment(createdAt).fromNow()}</Card.Meta>
                             <Card.Description > {body} </Card.Description>
                         </Card.Content>
                     </Card>
@@ -145,11 +145,18 @@ export default function Post(props) {
                                         </Comment.Text>
 
                                         {user && user.username === comment.username && (
-                                            <DeleteButton 
-                                                post={{id}}
-                                                postOrComment={false}
-                                                commentId={comment.id}
-                                            />
+                                            <>
+                                                <DeleteButton 
+                                                    post={{id}}
+                                                    postOrComment={false}
+                                                    commentId={comment.id}
+                                                />
+                                                <EditButton 
+                                                    post={{id}}
+                                                    postOrComment={false}
+                                                    commentId={comment.id}
+                                                />
+                                            </>
                                         )}
                                     </Comment.Content>
                                 </Card>

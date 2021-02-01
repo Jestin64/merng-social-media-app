@@ -1,7 +1,6 @@
 const Post = require("../../models/post.model")
 const authCheck = require("../../controllers/check-auth")
 const { AuthenticationError,UserInputError } = require("apollo-server")
-const { update } = require("../../models/post.model")
 
 
 const postResolvers = {
@@ -94,6 +93,25 @@ const postResolvers = {
                     return post
                 } else throw new Error("Post does not exist")
             } catch (e) {
+                throw new Error(e)
+            }
+        },
+
+        async editComment(_, {postId, commentId, body}, context){
+            const user = authCheck(context)
+            if(body.trim() === ''){
+                throw new Error('Cannot post empty comment')
+            }
+            try{
+                const post = await Post.findById(postId)
+                if(post){
+                    post.comments.map(comment=>{
+                        comment.id === commentId ? comment.body = body : null
+                    })                  
+                }
+                post.save()
+                return post
+            } catch(e){
                 throw new Error(e)
             }
         },

@@ -12,35 +12,63 @@ mutation editPost($postId: ID!, $body: String!){
     }
 }
 `
+const EDIT_COMMENT = gql`
+mutation editComment($postId:ID!, $commentId: ID!, $body: String!){
+    editComment(postId: $postId, commentId: $commentId, body: $body){
+        id
+        username
+        comments{
+            id 
+            body
+            username
+        }
+    }
+}
+`
 
-export default function EditButton({post: {id}}){
+
+export default function EditButton({post: {id}, postOrComment, commentId='default_placeholder'}){
 
     const [open, setOpen] = useState(false)
     const [body, setBody] = useState('')
-    const [editPost, {loading, error}] = useMutation(EDIT_POST, {
+    const [editPost, {loading: postloading}] = useMutation(EDIT_POST, {
         variables:{
             postId: id,
             body: body
         }
     })
 
+    const [editComment, {loading: commentloading}] = useMutation(EDIT_COMMENT, {
+        variables:{
+            postId: id,
+            commentId: commentId,
+            body: body
+        }
+    })
+
+
     function handleOnChange(e) {
         e.preventDefault()
         setBody(e.target.value)
     }
 
-    function handleEditClick(e){
+    function handlePostEditClick(e){
         e.preventDefault()
         editPost()
+        setOpen(false)
+    }
+    function handleCommentEditClick(e){
+        e.preventDefault()
+        editComment()
         setOpen(false)
     }
 
     function textField(){
        return (
         <Input 
-            placeholder="enter here"
-            loading={loading}
             focus
+            placeholder="enter here"
+            loading={postloading || commentloading}
             onChange={handleOnChange} 
             style={{width: '100%'}}
         />
@@ -55,7 +83,7 @@ export default function EditButton({post: {id}}){
                 floated="left"
                 onClick = {()=>setOpen(true)}
                 style={{marginTop: "4px", marginBottom: "4px",}}
-            > Edit post
+            > {postOrComment ? 'Edit post': 'edit comment'}
             </Button>
 
             <Confirm
@@ -63,7 +91,7 @@ export default function EditButton({post: {id}}){
                 header='Edit your post'
                 open={open}
                 onCancel={()=>setOpen(false)}
-                onConfirm={handleEditClick}
+                onConfirm={postOrComment ? handlePostEditClick : handleCommentEditClick}
             />
 
         </div>

@@ -1,5 +1,6 @@
 {
-  "name": "react-skeleton",
+  "name": "mern-app",
+  "description": "A MERN stack application with graphql and apollo client",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -40,7 +41,7 @@
     "webpack-node-externals": "^2.5.2"
   },
   "scripts": {
-    "build": "webpack --mode development --config webpack.client.config.js",
+    "build": "webpack --mode=production --config webpack.client.config.js && webpack --mode=production --config webpack.server.config.js",
     "dev": "nodemon",
     "client": "webpack serve --mode development --config webpack.client.config.js"
   }

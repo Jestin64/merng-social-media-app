@@ -14,6 +14,7 @@ const FETCH_POSTS = gql`
       id
       username
       body
+      createdAt
       comments {
         id
         body
@@ -59,7 +60,11 @@ function Home() {
                         <Grid.Row>
                             {
                                 loading
-                                    ? <h3>loading...</h3>
+                                    ? <h3 style={{ 
+                                        backgroundColor: "rgba(255, 255, 255, 0.7)",
+                                        padding:"3%", margin: "1%",
+                                        borderRadius: "5px"}}
+                                        >loading...</h3>
                                     :
                                     posts && posts.map(post => {
                                         return (

@@ -44,6 +44,7 @@ function PostCard({ post: { id, body, username, likes, comments, createdAt, coun
                         <div>
                             <EditButton 
                                 post={{id}}
+                                postOrComment={true}
                             />
 
                             <DeleteButton
