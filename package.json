@@ -46,6 +46,7 @@
   },
   "scripts": {
     "dev": "nodemon",
-    "client": "webpack serve --mode development --config webpack.client.config.js"
+    "client": "webpack serve --mode development --config webpack.client.config.js",
+    "start": "nodemon"
   }
 }
