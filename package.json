@@ -14,11 +14,13 @@
     "apollo-client": "^2.6.10",
     "apollo-link-context": "^1.0.20",
     "apollo-link-http": "^1.5.17",
-    "apollo-server": "^2.19.0",
+    "apollo-server": "^2.19.2",
+    "apollo-server-express": "^2.19.2",
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
     "graphql": "^15.4.0",
     "graphql-tag": "^2.11.0",
-    "html-webpack-plugin": "^4.5.1",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
     "mongoose": "^5.11.2",
@@ -26,11 +28,7 @@
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^2.0.1",
-    "webpack": "^5.19.0",
-    "webpack-cli": "^4.4.0",
-    "webpack-dev-server": "^3.11.2",
-    "webpack-node-externals": "^2.5.2"
+    "semantic-ui-react": "^2.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -39,13 +37,20 @@
     "babel-loader": "^8.2.2",
     "css-loader": "^5.0.1",
     "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^4.5.1",
     "jwt-decode": "^3.1.2",
+    "nodemon": "^2.0.7",
     "style-loader": "^2.0.0",
-    "url-loader": "^4.1.1"
+    "url-loader": "^4.1.1",
+    "webpack": "^5.19.0",
+    "webpack-cli": "^4.4.0",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-node-externals": "^2.5.2"
   },
   "scripts": {
     "dev": "nodemon",
     "client": "webpack serve --mode development --config webpack.client.config.js",
-    "start": "webpack --mode=production --config webpack.client.config.js && webpack --mode=production --config webpack.server.config.js"
+    "build": "webpack --config webpack.client.production.config.js && webpack --mode=production --config webpack.server.config.js",
+    "start": "SET NODE_ENV=production node ./dist/server.generated.js"
   }
 }

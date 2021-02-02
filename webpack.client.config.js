@@ -51,6 +51,7 @@ module.exports = {
         port: 4000,
         hot: true,
         watchContentBase: true,
-        compress: true
+        compress: true,
+        publicPath: '/',
     }
 }
