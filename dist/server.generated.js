@@ -10,7 +10,7 @@ module.exports =
 
 const {
   AuthenticationError
-} = __webpack_require__(Object(function webpackMissingModule() { var e = new Error("Cannot find module 'apollo-server-express'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+} = __webpack_require__(/*! apollo-server */ "apollo-server");
 
 const jwt = __webpack_require__(/*! jsonwebtoken */ "jsonwebtoken"); //const { SECRET_KEY } = require("../../config")
 
@@ -561,7 +561,7 @@ module.exports = userResolvers;
 
 const {
   gql
-} = __webpack_require__(Object(function webpackMissingModule() { var e = new Error("Cannot find module 'apollo-server-express'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+} = __webpack_require__(/*! apollo-server */ "apollo-server");
 
 const typeDefs = gql`
     type Query{
