@@ -1,6 +1,7 @@
 {
   "name": "mern-app",
   "description": "A MERN stack application with graphql and apollo client",
+  "homepage": "http://Jestin64.github.io/merng-social-media-app",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -19,6 +20,7 @@
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "gh-pages": "^3.1.0",
     "graphql": "^15.4.0",
     "graphql-tag": "^2.11.0",
     "jsonwebtoken": "^8.5.1",
@@ -48,9 +50,11 @@
     "webpack-node-externals": "^2.5.2"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "dev": "nodemon",
-    "client": "webpack serve --mode development --config webpack.client.config.js",
+    "client": "webpack serve --mode production --config webpack.client.config.js",
     "build": "webpack --config webpack.client.production.config.js && webpack --mode=production --config webpack.server.config.js",
-    "start": "SET NODE_ENV=production node ./dist/server.generated.js"
+    "start": "node ./dist/server.generated.js"
   }
 }
