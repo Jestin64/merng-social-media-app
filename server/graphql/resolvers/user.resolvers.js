@@ -5,10 +5,10 @@ const { UserInputError } = require("apollo-server-express")
 const User = require("../../models/user.model.js")
 const Post = require("../../models/post.model.js")
 const authCheck = require("../../controllers/check-auth.js")
-const { SECRET_KEY } = require("../../../config.js")
+// const { SECRET_KEY } = require("../../../config.js")
 const { validateRegisterData, validateLogin } = require("../../controllers/validators.js")
 
-const SECRET_KEY = process.env.SECRET_KEY || SECRET_KEY
+const SECRET_KEY = process.env.SECRET_KEY || 'GLORy to mankind'
 
 function generateToken(res) {
     return (
