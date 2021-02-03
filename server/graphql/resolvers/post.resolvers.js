@@ -1,6 +1,6 @@
-const Post = require("../../models/post.model")
-const authCheck = require("../../controllers/check-auth")
-const { AuthenticationError,UserInputError } = require("apollo-server-express")
+const Post = require("../../models/post.model.js")
+const authCheck = require("../../controllers/check-auth.js")
+const { AuthenticationError,UserInputError } = require("apollo-server")
 
 
 const postResolvers = {
