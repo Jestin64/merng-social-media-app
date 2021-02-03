@@ -1,8 +1,9 @@
 const { AuthenticationError } = require("apollo-server-express")
 const jwt = require("jsonwebtoken")
 
-const { SECRET_KEY } = require("../../config")
+//const { SECRET_KEY } = require("../../config")
 
+const SECRET_KEY = process.env.SECRET_KEY || 'GLORy to mankind'
 
 //token expression pattern: context.req.headers.authorization.Bearer Token 
 function authCheck(context) {
