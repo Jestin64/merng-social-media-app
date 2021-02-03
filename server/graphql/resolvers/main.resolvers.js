@@ -1,5 +1,5 @@
-const postResolvers = require("./post.resolvers")
-const userResolvers = require("./user.resolvers")
+const postResolvers = require("./post.resolvers.js")
+const userResolvers = require("./user.resolvers.js")
 
 const resolvers = {
     Post: {
