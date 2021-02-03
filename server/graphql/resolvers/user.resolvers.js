@@ -8,6 +8,7 @@ const authCheck = require("../../controllers/check-auth.js")
 const { SECRET_KEY } = require("../../../config.js")
 const { validateRegisterData, validateLogin } = require("../../controllers/validators.js")
 
+const SECRET_KEY = process.env.SECRET_KEY || SECRET_KEY
 
 function generateToken(res) {
     return (
